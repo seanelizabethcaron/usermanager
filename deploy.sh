@@ -31,6 +31,8 @@ if [ "$1" == "core" ]; then
     cp scan_and_unlock_trained.py /opt/usermanager/bin
     cp usermanager_importer.py /opt/usermanager/bin
     cp usermanager_home_agent.py /opt/usermanager/bin
+    cp apidirectory.py /opt/usermanager/bin
+    cp setup_schema.py /opt/usermanager/bin
 
     #
     # Deploy configuration and templates
