@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CSG User Account Request</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+      <div class="header_left">
+        <img src="logo.png">
+      </div>
+      <div class="header_right">
+        <b>University of Michigan Center for Statistical Genetics</b><br>
+        <b>User Account Request Form</b>
+      </div>
+    </div>
+    <div class="content">
+    <div class="contentleft">
+      <form action="/cgi-bin/usermanager/usermanager_form_handler.py" method="post" id="request">
+      <div>
+        <label for="uniqname">Uniqname:</label>
+        <input type="text" id="uniqname" name="uniqname">
+      </div>
+      <div>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title">
+      </div>
+      <div>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email">
+      </div>
+      <div>
+        <label for="reason">Reason:</label>
+        <input type="text" id="reason" name="reason">
+      </div>
+      <div>
+        <label for="role">Role:</label>
+        <select name="role" id="role">
+            <option value="">Please select...</option>
+            <option value="alumni_user">Alumni user</option>
+            <option value="boehnke_user">Boehnke Lab user</option>
+            <option value="abecasis_user">Abecasis Lab user</option>
+            <option value="willer_user">Willer Lab user</option>
+            <option value="zhou_user">Zhou Lab user</option>
+            <option value="psoriasis_user">Psoriasis project user</option>
+            <option value="twins_user">TWINS project user</option>
+            <option value="mukherjee_user">Mukherjee Lab user</option>
+            <option value="lee_user">Lee Lab user</option>
+            <option value="external_user">External collaborator</option>
+        </select>
+      </div>
+      <div>
+        <label for="groups">Groups:</label>
+        <input type="text" id="groups" name="groups" value="statgen-users">
+      </div>
+      <div>
+        <label for="startdate">Start date:</label>
+        <input type="date" id="startdate" name="startdate">
+      </div>
+      <div>
+        <label for="expirydate">Expiry date:</label>
+        <input type="date" id="expirydate" name="expirydate">
+      </div>
+      <div>
+        <label for="topmed_user">Working on TOPMED?</label>
+        <input type="checkbox" id="topmed_user" name="topmed_user">
+      </div>
+      <div>
+        <label for="approver">Approver:</label>
+        <select name="approver">
+            <option value="">Please select...</option>
+            <option value="scaron">Sean Caron</option>
+        </select>
+      </div>
+    </div>
+    <div class="contentright">
+      <b>Guidelines for user account requests</b>
+      <ul>
+      <li>All users must have a valid University of Michigan uniqname prior to requesting a CSG account. For more information about requesting a uniqname, please see <a href="http://its.umich.edu/accounts-access/getting-access/uniqnames-accounts">Uniqnames &amp; Accounts at U-M ITS</a>.
+      <li>Home directory location is determined by the lab affiliation specified in the Role field.
+      <li>Users <b>must</b> at minimum have membership in the <tt>statgen-users</tt> group in order to log on to snowwhite, dumbo, fantasia or wonderland.
+      <li>If the account will require membership in multiple groups, please specify a <b>comma separated</b> list of groups.
+      <li>All users must complete the DCE 101 training module on MAIS LINC before their account will be available to use.
+      <li>If a user will be working on the TOPMED project, please check the associated box. Users working on the TOPMED project must complete both the DCE 101 and ITSE 106 training modules on MAIS LINC before their account will be available to use.
+      <li>Users will receive an email automatically with links to their required training modules once their account request is approved.
+      </ul>
+    </div>
+    </div>
+    <div class="footer">
+      <div class="button">
+        <button type="submit">Request account</button>
+      </div>
+      </form>
+    </div>
+    <script>
+        document.getElementById('role').addEventListener('change',function(){
+            var e = document.getElementById("role");
+            var strRole = e.options[e.selectedIndex].text;
+            if (strRole == "Alumni user") {
+                document.getElementById('groups').value = "statgen-users,alumni-users";
+            }
+
+            else if (strRole == "Willer Lab user") {
+                document.getElementById('groups').value = "statgen-users,server-hunt";
+            }
+
+            else if (strRole == "Zhou Lab user") {
+                document.getElementById('groups').value = "statgen-users,server-mulan";
+            }
+
+            else if (strRole == "Psoriasis project user") {
+                document.getElementById('groups').value = "statgen-users,server-psoriasis";
+            }
+
+            else if (strRole == "TWINS project user") {
+                document.getElementById('groups').value = "statgen-users,server-twins";
+            }
+
+            else if (strRole == "Mukherjee Lab user") {
+                document.getElementById('groups').value = "statgen-users,server-junglebook";
+            }
+
+            else if (strRole == "Lee Lab user") {
+                document.getElementById('groups').value = "statgen-users,server-mendel";
+            }
+
+            else if (strRole == "External collaborator") {
+                document.getElementById('groups').value = "sandbox-users";
+            }
+
+            else {
+                document.getElementById('groups').value = "statgen-users";
+            }
+        });
+
+        document.getElementById('request').addEventListener('submit', function(event) {
+            var e = document.getElementById("role");
+            var strRole = e.options[e.selectedIndex].text;
+            var f = document.getElementById("groups")
+            var strGrp = f.value
+
+            if (strRole == "Alumni user") {
+                if (!strGrp.includes("alumni-users") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Alumni users must at least be a member of groups alumni-users and statgen-users!");
+                }
+            }
+
+            else if (strRole == "Boehnke Lab user" || strRole == "Abecasis Lab user") {
+                if (!strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Abecasis and Boehnke Lab users must at least be a member of group statgen-users!");
+                }
+            }
+            
+            else if (strRole == "Willer Lab user") {
+                if (!strGrp.includes("server-hunt") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Willer Lab users must at least be a member of groups server-hunt and statgen-users!");
+                }
+            }
+
+            else if (strRole == "Zhou Lab user") {
+                if (!strGrp.includes("server-mulan") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Zhou Lab users must at least be a member of groups server-mulan and statgen-users!");
+                }
+            }
+
+            else if (strRole == "Psoriasis project user") {
+                if (!strGrp.includes("server-psoriasis") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Psoriasis project users must at least be a member of groups server-psoriasis and statgen-users!");
+                }
+            }
+
+            else if (strRole == "TWINS project user") {
+                if (!strGrp.includes("server-twins") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("TWINS project users must at least be a member of groups server-twins and statgen-users!");
+                }
+            }
+
+            else if (strRole == "Mukherjee Lab user") {
+                if (!strGrp.includes("server-junglebook") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Mukherjee Lab users must at least be a member of groups server-junglebook and statgen-users!");
+                }
+            }
+
+            else if (strRole == "Lee Lab user") {
+                if (!strGrp.includes("server-mendel") || !strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Lee Lab users must at least be a member of groups server-mendel and statgen-users!");
+                }
+            }
+
+            else if (strRole == "External collaborator") {
+                if (!strGrp.includes("sandbox-users") || strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("External collaborators must be a member of group sandbox-users and not a member of statgen-users!");
+                }
+            }
+        }, false);
+    </script>
+  </body>
+</html>
