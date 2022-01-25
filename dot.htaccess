@@ -1,9 +1,0 @@
-CosignProtected On
-AuthType Cosign
-# Comment out the five lines below if we want to permit any valid Cosign login
-AuthBasicProvider ldap
-AuthLDAPURL ldap://192.168.1.253:389/dc=csg,dc=sph,dc=umich,dc=edu?uid
-AuthLDAPGroupAttribute memberUid
-AuthLDAPGroupAttributeIsDN off
-Require ldap-group cn=statgen-users,ou=Groups,dc=csg,dc=sph,dc=umich,dc=edu
-Require valid-user
