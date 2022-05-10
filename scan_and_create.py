@@ -247,7 +247,7 @@ for row in report:
         suggested_hosts = '<tt>sandbox.sph.umich.edu</tt>'
     elif role == 'lee_user':
         suggested_hots = '<tt>mendel.sph.umich.edu</tt>'
-    elif role == 'mukherjee_user':
+    elif role == 'mukherjee_user' or role == 'fritsche_user':
         suggested_hosts = '<tt>junglebook.sph.umich.edu</tt>'
     elif role == 'psoriasis_user':
         suggested_hosts = '<tt>psoriasis.sph.umich.edu</tt>'
