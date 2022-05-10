@@ -332,6 +332,9 @@ elif role == 'twins_user':
 elif role == 'mukherjee_user':
     home_host = 'junglebook'
     homedir = '/net/junglebook/home/' + uniqname
+elif role == 'fritsche_user':
+    home_host = 'junglebook'
+    homedir = '/net/junglebook/home/' + uniqname
 elif role == 'lee_user':
     home_host = 'mendel'
     homedir = '/net/mendel/home/' + uniqname
