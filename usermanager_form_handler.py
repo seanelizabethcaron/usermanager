@@ -1,4 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+#
+# Requires packages: python3-ldap, python3-mysqldb python3-pymssql
+#
 
 def generate_html_header():
     print('Content-type: text/html\n')
@@ -118,13 +122,13 @@ def err_invalid_chars():
     print('Field contains invalid characters. Please go back and check fields for invalid characters.')
 
 # Requires packages: python-ldap, python-mysqldb
-import sys,os,cgi,time,ldap,MySQLdb, ConfigParser, smtplib, random, pymssql, datetime
+import sys,os,cgi,time,ldap,MySQLdb,configparser,smtplib,random,pymssql,datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 from string import Template
 
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
