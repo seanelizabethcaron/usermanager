@@ -1,8 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-import csv, ldap, ConfigParser, MySQLdb, time, sys, os
+#
+# Requires packages: python3-ldap, python3-mysqldb
+#
 
-cfg = ConfigParser.ConfigParser()
+import csv,ldap,configparser,MySQLdb,time,sys,os
+
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
