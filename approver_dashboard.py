@@ -1,6 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-import os, cgi, time, sys, MySQLdb, ConfigParser, smtplib, json, requests
+#
+# Requires packages: python3-mysqldb python3-ldap
+#
+
+import os, cgi, time, sys, MySQLdb, configparser, smtplib, json, requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 try:
@@ -12,7 +16,7 @@ from apidirectory import ApiDirectory
 
 from string import Template
 
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
