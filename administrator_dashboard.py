@@ -1,4 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+#
+# Requires packages: python3-mysqldb python3-ldap
+#
 
 def generate_html_header():
     print('Content-type: text/html\n')
@@ -31,10 +35,10 @@ def generate_html_footer():
 def cosign_failure():
     print('Cosign appears to be broken. Please contact a systems administrator.')
     
-import os, cgi, time, datetime, sys, MySQLdb, ConfigParser, ldap
+import os, cgi, time, datetime, sys, MySQLdb, configparser, ldap
 import ldap.modlist as modlist
 
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
