@@ -1,12 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-import csv, ldap, ConfigParser, MySQLdb, time, sys, os, pymssql, datetime, smtplib
+#
+# Requires packages: python3-ldap, python3-mysqldb python3-pymssql
+#
+
+import csv,ldap,configparser,MySQLdb,time,sys,os,pymssql,datetime,smtplib
 import ldap.modlist as modlist
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from string import Template
 
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
