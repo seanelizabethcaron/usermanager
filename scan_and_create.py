@@ -101,19 +101,21 @@ for row in report:
     dn = 'uid=' + uniqname + ',ou=People,dc=csg,dc=sph,dc=umich,dc=edu'
 
     attrs = {}
-    attrs['uid'] = uniqname
-    attrs['uidNumber'] = str(uidnumber)
-    attrs['gidNumber'] = '1007'
-    attrs['cn'] = firstname + ' ' + lastname
-    attrs['givenName'] = firstname
-    attrs['sn'] = lastname
-    attrs['gecos'] = firstname + ' ' + lastname
-    attrs['homeDirectory'] = homedir
-    attrs['loginShell'] = '/bin/bash'
-    attrs['shadowMax'] = '99999'
-    attrs['shadowWarning'] = '7'
-    attrs['userPassword'] = randomPassword
-    attrs['objectclass'] = ['gosaAccount', 'inetOrgPerson', 'organizationalPerson', 'posixAccount', 'top', 'shadowAccount', 'person']
+    attrs['uid'] = uniqname.encode()
+    attrs['uidNumber'] = str(uidnumber).encode()
+    attrs['gidNumber'] = '1007'.encode()
+    cn_t = firstname + ' ' + lastname
+    attrs['cn'] = cn_t.encode()
+    attrs['givenName'] = firstname.encode()
+    attrs['sn'] = lastname.encode()
+    gecos_t = firstname + ' ' + lastname
+    attrs['gecos'] = gecos_t.encode()
+    attrs['homeDirectory'] = homedir.encode()
+    attrs['loginShell'] = '/bin/bash'.encode()
+    attrs['shadowMax'] = '99999'.encode()
+    attrs['shadowWarning'] = '7'.encode()
+    attrs['userPassword'] = randomPassword.encode()
+    attrs['objectclass'] = [b'gosaAccount', b'inetOrgPerson', b'organizationalPerson', b'posixAccount', b'top', b'shadowAccount', b'person']
 
     ldif = modlist.addModlist(attrs)
 
@@ -125,7 +127,7 @@ for row in report:
     l.add_s(dn, ldif)
 
     # We need to add a snippet of code here to update statgen-users with the new user.
-    modl = [(ldap.MOD_ADD, 'memberUid', [uniqname])]
+    modl = [(ldap.MOD_ADD, 'memberUid', [uniqname.encode()])]
     # Make adding to statgen-users a default in the form, not forced default in this script.
     #l.modify_s('cn=statgen-users,ou=Groups,dc=csg,dc=sph,dc=umich,dc=edu', modl)
 
