@@ -205,7 +205,7 @@ for row in report:
         user_password = results['userPassword'][0]
 
         # GoSA marks accounts as being locked by putting an exclamation point between the hash type and the hash itself
-        locked_pwd = user_password.replace("}", "}!")
+        locked_pwd = user_password.encode().replace("}", "}!")
 
         # Write back the updated password to LDAP and lock the account
         modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd.encode()])]
