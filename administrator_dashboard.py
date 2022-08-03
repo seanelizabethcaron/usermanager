@@ -341,7 +341,7 @@ if fm_selectuser:
                 baseDN = private_ldap_group_basedn
                 searchScope = ldap.SCOPE_SUBTREE
                 retrieveAttributes = ["cn"]
-                modl = [(ldap.MOD_DELETE, 'memberUid', [fm_selectuser])]
+                modl = [(ldap.MOD_DELETE, 'memberUid', [fm_selectuser.encode()])]
 
                 # For each group, check that it exists in LDAP before we attempt to remove a user from it
                 searchFilter = "cn=" + old_group
