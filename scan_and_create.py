@@ -208,7 +208,7 @@ for row in report:
         locked_pwd = user_password.replace("}", "}!")
 
         # Write back the updated password to LDAP and lock the account
-        modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd])]
+        modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd.encode()])]
         l.modify_s(dn, modl)
 
     # Add the user to the SLURM accounting database
