@@ -254,10 +254,10 @@ if fm_selectuser:
             user_password = results['userPassword'][0]
 
             # GoSA marks accounts as being locked by putting an exclamation point between the hash type and the hash itself
-            unlocked_pwd = user_password.replace("}!", "}")
+            unlocked_pwd = user_password.decode().replace("}!", "}")
 
             # Write back the updated password to LDAP to unlock the account
-            modl = [(ldap.MOD_REPLACE, 'userPassword', [unlocked_pwd])]
+            modl = [(ldap.MOD_REPLACE, 'userPassword', [unlocked_pwd.encode()])]
             l.modify_s(dn, modl)
 
             # Unbind from the LDAP directory
