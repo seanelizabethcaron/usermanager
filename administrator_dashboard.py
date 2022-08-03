@@ -202,10 +202,10 @@ if fm_selectuser:
             user_password = results['userPassword'][0]
 
             # GoSA marks accounts as being locked by putting an exclamation point between the hash type and the hash itself
-            locked_pwd = user_password.replace("}", "}!")
+            locked_pwd = user_password.decode().replace("}", "}!")
 
             # Write back the updated password to LDAP and lock the account
-            modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd])]
+            modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd.encode()])]
             l.modify_s(dn, modl)
 
             # Update the database to note the account having been locked and make sure the reactivate flag is cleared
