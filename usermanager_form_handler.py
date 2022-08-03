@@ -469,8 +469,8 @@ uid_number = results['uidNumber'][0]
 
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
-    debuglog.write(debug_time + ': UID number reported by U-M LDAP is ' + uid_number + '\n')
-    debuglog.write(debug_time + ': First name and last name reported by U-M LDAP is ' + firstname + ' ' + lastname + '\n')
+    debuglog.write(debug_time + ': UID number reported by U-M LDAP is ' + uid_number.decode() + '\n')
+    debuglog.write(debug_time + ': First name and last name reported by U-M LDAP is ' + firstname.decode() + ' ' + lastname.decode() + '\n')
 
 # If the account does not exist, add it to the database with approved flag = false
 #  Then send an e-mail to the approver, with a link to the Approver dashboard
@@ -503,7 +503,7 @@ if countup != 0:
 #  the database.
 curs = db.cursor()
 # We will populate this in production by reading a Cosign environment variable
-query = 'INSERT INTO users (uniqname,uidnumber,firstname,lastname,emailaddress,title,startdate,enddate,approver,requestor,reason,role,approved,rejected,created,expired,locked,reactivate) VALUES (\'' + uniqname + '\',' + uid_number + ',\'' + firstname + '\',\'' + lastname + '\',\'' + email + '\',\'' + title + '\',\'' + startdate + '\',\'' + expirydate + '\',\'' + approver + '\',\'' + requestor + '\',\'' + reason + '\',\'' + role + '\',0,0,0,0,0,0);'
+query = 'INSERT INTO users (uniqname,uidnumber,firstname,lastname,emailaddress,title,startdate,enddate,approver,requestor,reason,role,approved,rejected,created,expired,locked,reactivate) VALUES (\'' + uniqname + '\',' + uid_number.decode() + ',\'' + firstname.decode() + '\',\'' + lastname.decode() + '\',\'' + email + '\',\'' + title + '\',\'' + startdate + '\',\'' + expirydate + '\',\'' + approver + '\',\'' + requestor + '\',\'' + reason + '\',\'' + role + '\',0,0,0,0,0,0);'
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
     debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
@@ -617,7 +617,7 @@ db.commit()
 if audit:
     audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
     auditlog.write(audit_time + ': Received request to create user account ' + uniqname + ' from ' + requestor + ' with approver ' + approver + '\n')
-    auditlog.write(audit_time + ': First name = ' + firstname + ' Last name = ' + lastname + '\n')
+    auditlog.write(audit_time + ': First name = ' + firstname.decode() + ' Last name = ' + lastname.decode() + '\n')
     auditlog.write(audit_time + ': Contact email = ' + email + '\n')
     auditlog.write(audit_time + ': Title = ' + title + ' Reason = ' + reason + '\n')
     auditlog.write(audit_time + ': Role = ' + role + '\n')
@@ -637,7 +637,7 @@ emailtext = tpl.substitute(FIRSTNAME=firstname, LASTNAME=lastname, REQUESTOR=req
 
 msg = MIMEMultipart('alternative')
 
-msg['Subject'] = 'New CSG cluster account request pending approval for ' + firstname + ' ' + lastname
+msg['Subject'] = 'New CSG cluster account request pending approval for ' + firstname.decode() + ' ' + lastname.decode()
 msg['From'] = 'do-not-reply@umich.edu'
 msg['To'] = approvermail
 
@@ -679,7 +679,7 @@ emailtext = tpl.substitute(REQUESTOR=requestor, FIRSTNAME=firstname, LASTNAME=la
 
 msg = MIMEMultipart('alternative')
 
-msg['Subject'] = 'New CSG cluster account request receipt confirmation for ' + firstname + ' ' + lastname
+msg['Subject'] = 'New CSG cluster account request receipt confirmation for ' + firstname.decode() + ' ' + lastname.decode()
 msg['From'] = 'do-not-reply@umich.edu'
 msg['To'] = requestermail
 
@@ -693,7 +693,7 @@ s.quit()
 
 # Generate a page to inform the requestor that the account request was successfully processed
 generate_html_header()
-account_request_successful(firstname, lastname)
+account_request_successful(firstname.decode(), lastname.decode())
 generate_html_footer_noback()
 
 
