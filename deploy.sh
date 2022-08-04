@@ -7,6 +7,9 @@
 #
 
 if [ "$1" == "core" ]; then
+
+    apt-get -y install python3-ldap, python3-mysqldb python3-pymssql
+
     rm -rf /opt/usermanager/bin
     mkdir -p /opt/usermanager/{bin,etc}
     cp README.md /opt/usermanager
@@ -57,6 +60,8 @@ if [ "$1" == "core" ]; then
     cp webform/dot.htaccess /var/www/usermanager/.htaccess
 
 elif [ "$1" == "homeagent" ]; then
+    apt-get -y install python3-mysqldb
+    
     rm -rf /opt/usermanager/bin
     mkdir -p /opt/usermanager/{bin,etc}
     cp README.md /opt/usermanager
