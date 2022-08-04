@@ -67,7 +67,7 @@ query = 'CREATE TABLE trainings (serialnum integer NOT NULL PRIMARY KEY, dce101_
 curs.execute(query)
 db.commit()
 
-print 'Trainints table created\n'
+print 'Trainings table created\n'
 
 print 'User Manager DB schema setup complete!\n'
 
