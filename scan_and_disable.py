@@ -130,13 +130,17 @@ for row in report:
 
     emailtext = tpl.substitute(FIRSTNAME=firstname)
     
-    msg = MIMEText(emailtext)
+    msg = MIMEMultipart('alternative')
 
     # In production, update this to send to the actual users using their email addresses pulled from the DB
     msg['Subject'] = 'CSG cluster account expiry notification for ' + uniqname 
     msg['From'] = 'do-not-reply@umich.edu'
     msg['To'] = email
 
+    part1 = MIMEText(emailtext, 'html')
+    
+    msg.attach(part1)
+    
     s = smtplib.SMTP('localhost')
     s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
     s.quit()
