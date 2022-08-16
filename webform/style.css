@@ -81,7 +81,7 @@ body {
     font-size: 14px;
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
     margin: 1%;
     padding: 1%;
 }
@@ -159,19 +159,22 @@ input, textarea {
 
 input[type=text] {
     /* To give the same size to all text fields */
-    width: 300px;
+    width: 200px;
 }
 
 input[type=email] {
     /* To give the same size to all text fields */
-    width: 300px;
+    width: 200px;
 }
 
 input[type=textarea] {
     /* To give the same size to all text fields */
-    width: 300px;
+    width: 200px;
 }
 
+label {
+    width: 175px;
+}
 
 input:focus, textarea:focus {
     /* To give a little highlight on active elements */
@@ -196,4 +199,3 @@ button {
        between the labels and their text fields */
     margin-left: .5em;
 }
-
