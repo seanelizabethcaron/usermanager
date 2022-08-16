@@ -19,23 +19,23 @@
     <div class="contentleft">
       <form action="/cgi-bin/usermanager/usermanager_form_handler.py" method="post" id="request">
       <div>
-        <label for="uniqname">Uniqname:</label>
+        <label for="uniqname">Uniqname of user:</label>
         <input type="text" id="uniqname" name="uniqname">
       </div>
       <div>
-        <label for="title">Title:</label>
+        <label for="title">Title of user:</label>
         <input type="text" id="title" name="title">
       </div>
       <div>
-        <label for="email">E-mail:</label>
+        <label for="email">Contact email for user:</label>
         <input type="email" id="email" name="email">
       </div>
       <div>
-        <label for="reason">Reason:</label>
+        <label for="reason">Reason for creating:</label>
         <input type="text" id="reason" name="reason">
       </div>
       <div>
-        <label for="role">Role:</label>
+        <label for="role">Role of user:</label>
         <select name="role" id="role">
             <option value="">Please select...</option>
             <option value="alumni_user">Alumni user</option>
@@ -158,7 +158,7 @@
                     alert("Abecasis and Boehnke Lab users must at least be a member of group statgen-users!");
                 }
             }
-            
+
             else if (strRole == "Willer Lab user") {
                 if (!strGrp.includes("server-hunt") || !strGrp.includes("statgen-users")) {
                     event.preventDefault();
@@ -200,7 +200,7 @@
                     alert("Fritsche Lab users must at least be a member of groups server-junglebook and statgen-users!");
                 }
             }
-          
+
             else if (strRole == "Lee Lab user") {
                 if (!strGrp.includes("server-mendel") || !strGrp.includes("statgen-users")) {
                     event.preventDefault();
