@@ -7,6 +7,7 @@
 import os, cgi,time,ldap,MySQLdb,configparser,smtplib,string,random
 import ldap.modlist as modlist
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from string import Template
 
 cfg = configparser.ConfigParser()
