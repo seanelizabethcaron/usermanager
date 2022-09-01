@@ -633,7 +633,7 @@ with open(pending_tpl) as tp:
 
 tpl = Template(lines)
 
-emailtext = tpl.substitute(FIRSTNAME=firstname, LASTNAME=lastname, REQUESTOR=requestor, STARTDATE=startdate, EXPIRYDATE=expirydate, TITLE=title, ROLE=role, REASON=reason, EMAIL=email, GROUPS=groups, HOMEDIR=homedir)
+emailtext = tpl.substitute(FIRSTNAME=firstname.decode(), LASTNAME=lastname.decode(), REQUESTOR=requestor, STARTDATE=startdate, EXPIRYDATE=expirydate, TITLE=title, ROLE=role, REASON=reason, EMAIL=email, GROUPS=groups, HOMEDIR=homedir)
 
 msg = MIMEMultipart('alternative')
 
@@ -675,7 +675,7 @@ with open(confirm_tpl) as tp:
 
 tpl = Template(lines)
 
-emailtext = tpl.substitute(REQUESTOR=requestor, FIRSTNAME=firstname, LASTNAME=lastname)
+emailtext = tpl.substitute(REQUESTOR=requestor, FIRSTNAME=firstname.decode(), LASTNAME=lastname.decode())
 
 msg = MIMEMultipart('alternative')
 
