@@ -38,17 +38,18 @@
         <label for="role">Role of user:</label>
         <select name="role" id="role">
             <option value="">Please select...</option>
+            <option value="abecasis_user">Abecasis Lab user</option>
             <option value="alumni_user">Alumni user</option>
             <option value="boehnke_user">Boehnke Lab user</option>
-            <option value="abecasis_user">Abecasis Lab user</option>
-            <option value="willer_user">Willer Lab user</option>
-            <option value="zhou_user">Zhou Lab user</option>
-            <option value="psoriasis_user">Psoriasis project user</option>
-            <option value="twins_user">TWINS project user</option>
-            <option value="mukherjee_user">Mukherjee Lab user</option>
+            <option value="external_user">External collaborator</option>
             <option value="fritsche_user">Fritsche Lab user</option>
             <option value="lee_user">Lee Lab user</option>
-            <option value="external_user">External collaborator</option>
+            <option value="mukherjee_user">Mukherjee Lab user</option>
+            <option value="psoriasis_user">Psoriasis project user</option>
+            <option value="twins_user">TWINS project user</option>  
+            <option value="willer_user">Willer Lab user</option>
+            <option value="zhou_user">Zhou Lab user</option>
+            <option value="zoellner_user">Zoellner Lab user</option>
         </select>
       </div>
       <div>
@@ -152,13 +153,27 @@
                 }
             }
 
-            else if (strRole == "Boehnke Lab user" || strRole == "Abecasis Lab user") {
+            else if (strRole == "Boehnke Lab user") {
                 if (!strGrp.includes("statgen-users")) {
                     event.preventDefault();
-                    alert("Abecasis and Boehnke Lab users must at least be a member of group statgen-users!");
+                    alert("Boehnke Lab users must at least be a member of group statgen-users!");
                 }
             }
 
+            else if (strRole == "Abecasis Lab user") {
+                if (!strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Abecasis Lab users must at least be a member of group statgen-users!");
+                }
+            }
+          
+            else if (strRole == "Zoellner Lab user") {
+                if (!strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Zoellner Lab users must at least be a member of group statgen-users!");
+                }
+            }
+          
             else if (strRole == "Willer Lab user") {
                 if (!strGrp.includes("server-hunt") || !strGrp.includes("statgen-users")) {
                     event.preventDefault();
