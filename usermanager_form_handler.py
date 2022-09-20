@@ -318,6 +318,15 @@ elif role == 'abecasis_user':
     elif c == 2:
         home_host = 'wonderland'
         homedir = '/net/wonderland/home/' + uniqname
+elif role == 'zoellner_user':
+    # Randomly assign the user a home directory on wonderland or fantasia
+    c = random.randint(1,2)
+    if c == 1:
+        home_host = 'fantasia'
+        homedir = '/net/fantasia/home/' + uniqname
+    elif c == 2:
+        home_host = 'wonderland'
+        homedir = '/net/wonderland/home/' + uniqname
 elif role == 'willer_user':
     home_host = 'hunt'
     homedir = '/net/hunt/home/' + uniqname
