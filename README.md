@@ -12,7 +12,7 @@
 
 To run User Manager, we require:
 
-* An LDAP server with Apache, SSL and Cosign configured as well
+* An LDAP server with Apache, SSL and Cosign (or OIDC) configured as well
 * A MySQL database server (separate or same server as above)
 * At least one NFS server hosting home directories
 
