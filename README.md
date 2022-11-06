@@ -112,6 +112,12 @@ CREATE TABLE trainings (
 
 ### OpenID Connect configuration
 
+Ensure that we are setting the REMOTE_USER environment variable. The easiest way to do this is to configure OIDCRemoteUserClaim with the email attribute and use the filter to parse out the user name to assign to REMOTE_USER.
+
+```
+OIDCRemoteUserClaim email ^(.*)@
+```
+
 Add to the non-SSL site definition:
 
 ```
