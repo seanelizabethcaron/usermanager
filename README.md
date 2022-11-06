@@ -110,6 +110,81 @@ CREATE TABLE trainings (
     send_reminder boolean)
 ```
 
+### OpenID Connect configuration
+
+Add to the non-SSL site definition:
+
+```
+RewriteRule ^/usermanager https://%{SERVER_NAME}/usermanager/ [R=301,L]
+RewriteRule ^usermanager/(.*)$ https://%{SERVER_NAME}/usermanager/$1 [R=301,L]
+RewriteRule ^/cgi-bin/usermanager https://%{SERVER_NAME}/usermanager/ [R=301,L]
+RewriteRule ^/cgi-bin/usermanager/(.*)$ https://%{SERVER_NAME}/usermanager/$1 [R=301,L]
+```
+
+Add to the SSL site definition:
+
+```
+<Directory "/usr/lib/cgi-bin/usermanager">
+    AuthType openid-connect
+    Require valid-user
+    SSLRequireSSL
+</Directory>
+
+<Directory /var/www/usermanager>
+    AuthType openid-connect
+    Require valid-user
+    SSLRequireSSL
+</Directory>
+
+<Directory /usermanager>
+    AuthType openid-connect
+    Require valid-user
+    SSLRequireSSL
+</Directory>
+```
+
+The .htaccess file at /var/www/usermanager/index.html should look like:
+
+```
+AuthType openid-connect
+Require valid-user
+```
+
+We put the same .htaccess file in /usr/lib/cgi-bin/usermanager
+
+Edit /etc/apache2/sites-enabled/000-default.conf and change:
+
+```
+<Directory "/usr/lib/cgi-bin">
+    AllowOverride None
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+</Directory>
+```
+
+To read:
+
+```
+<Directory "/usr/lib/cgi-bin">
+    AllowOverride All
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+</Directory>
+```
+
+Also modify the SSL site definition /etc/apache2/sites-enabled/default-ssl to read the same:
+
+```
+<Directory "/usr/lib/cgi-bin">
+    AllowOverride All
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+</Directory>
+```
+
 ### Cosign configuration
 
 Add to the non-SSL site definition:
