@@ -223,7 +223,7 @@ for row in report:
     # Assign the user to the account that we just created
     acct_assign = 'account=' + uniqname
     def_acct_assign = 'defaultaccount=' + uniqname
-   
+
     os.spawnlp(os.P_WAIT, '/usr/cluster/bin/sacctmgr', '/usr/cluster/bin/sacctmgr', '-i', '-Q', 'create', 'user', uniqname, acct_assign, def_acct_assign, 'qoslevel=normal', 'defaultqos=normal')
 
     # Update the database to note the account having been created
@@ -249,14 +249,12 @@ for row in report:
         suggested_hosts = '<tt>csgalumni.sph.umich.edu</tt>'
     elif role == 'external_user':
         suggested_hosts = '<tt>sandbox.sph.umich.edu</tt>'
-    elif role == 'lee_user':
-        suggested_hots = '<tt>mendel.sph.umich.edu</tt>'
     elif role == 'mukherjee_user' or role == 'fritsche_user':
         suggested_hosts = '<tt>junglebook.sph.umich.edu</tt>'
+    elif role == 'kardiasmith_user':
+        suggested_hosts = '<tt>orion.sph.umich.edu</tt>'
     elif role == 'psoriasis_user':
         suggested_hosts = '<tt>psoriasis.sph.umich.edu</tt>'
-    elif role == 'twins_user':
-        suggested_hosts = '<tt>twins.sph.umich.edu</tt>'
     elif role == 'willer_user':
         suggested_hosts = '<tt>hunt.sph.umich.edu</tt>'
     elif role == 'zhou_user':
@@ -274,7 +272,7 @@ for row in report:
 
     msg = MIMEMultipart('alternative')
 
-    msg['Subject'] = 'New CSG cluster account information for ' + uniqname 
+    msg['Subject'] = 'New CSG cluster account information for ' + uniqname
     msg['From'] = 'do-not-reply@umich.edu'
     msg['To'] = email
 
