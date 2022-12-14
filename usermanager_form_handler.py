@@ -339,18 +339,15 @@ elif role == 'external_user':
 elif role == 'psoriasis_user':
     home_host = 'psoriasis'
     homedir = '/net/psoriasis/home/' + uniqname
-elif role == 'twins_user':
-    home_host = 'twins'
-    homedir = '/net/twins/home/' + uniqname
 elif role == 'mukherjee_user':
     home_host = 'junglebook'
     homedir = '/net/junglebook/home/' + uniqname
 elif role == 'fritsche_user':
     home_host = 'junglebook'
     homedir = '/net/junglebook/home/' + uniqname
-elif role == 'lee_user':
-    home_host = 'mendel'
-    homedir = '/net/mendel/home/' + uniqname
+elif role == 'kardiasmith_user':
+    home_host = 'orion'
+    homedir = '/net/orion/home/' + uniqname
 
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
