@@ -395,6 +395,24 @@ else:
     curs.execute(query)
     users = curs.fetchall()
 
+    curs = db.cursor()
+    query = 'SELECT COUNT(*) FROM users;'
+    curs.execute(query)
+    result = curs.fetchone()
+    total_users = str(result[0])
+
+    curs = db.cursor()
+    query = 'SELECT COUNT(*) FROM users WHERE locked = 0;'
+    curs.execute(query)
+    result = curs.fetchone()
+    unlocked_users = str(result[0])
+
+    curs = db.cursor()
+    query = 'SELECT COUNT(*) FROM users WHERE locked = 1;'
+    curs.execute(query)
+    result = curs.fetchone()
+    locked_users = str(result[0])
+
     todays_date = time.strftime("%Y-%m-%d", time.localtime())
 
     toggle = 0
@@ -444,6 +462,8 @@ else:
     print('</div>')
     print('<div class="footer">')
     print('<button type="submit" name="updateusers">Update fields for selected user</button>')
+    print('<p>')
+    print('<i>' + total_users + ' total users (' + unlocked_users + ' active, ' + locked_users + ' locked)</i>')
     print('</div>')
     print('</body>')
     print('</html>')
