@@ -110,6 +110,13 @@ CREATE TABLE trainings (
     send_reminder boolean)
 ```
 
+### U-M API Directory Integration
+
+User Manager supports automatically adding the user to an MCommunity group when it is approved (for example, an all staff email announcement list).
+
+Note that the client ID (aka client key) provided for the application by ITS must be added as an Also Known As entry for the owning group of the MCommunity
+group that we will be modifying with automated adds.
+
 ### OpenID Connect configuration
 
 Ensure that we are setting the REMOTE_USER environment variable. The easiest way to do this is to configure OIDCRemoteUserClaim with the email attribute and use the filter to parse out the user name.
