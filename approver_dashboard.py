@@ -78,8 +78,8 @@ class IamGroupUpdate:
     client_id = clientid
     secret = clientsecret
     scope = "iamgroups"
-    token_url = "https://apigw.it.umich.edu/um/inst/oauth2/token"
-    url_base = "https://apigw.it.umich.edu/um/iamGroups"
+    token_url = "https://gw.api.it.umich.edu/um/oauth2/token"
+    url_base = "https://gw.api.it.umich.edu/um/iamGroups"
 
     groupName = "csg-it-announcements"
     groupDn = "cn={},ou=user groups,ou=groups,dc=umich,dc=edu".format(groupName)
@@ -97,6 +97,9 @@ class IamGroupUpdate:
             url = "members/" + self.groupDn
             existingMembers = self.get_membership(url)
 
+            if existingMembers == None:
+                existingMembers = [ ]
+
             stringToAppend = 'uid=' + eMailUser + ',ou=people,dc=umich,dc=edu'
             existingMembers.append(stringToAppend)
 
@@ -107,6 +110,9 @@ class IamGroupUpdate:
         else:
             url = "members/" + self.groupDn
             existingExtMembers =  self.get_external_membership(url)
+
+            if existingExtMembers == None:
+                existingExtMembers = [ ]
 
             newExtMembers = [ ]
 
