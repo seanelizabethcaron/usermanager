@@ -19,6 +19,8 @@ debug = cfg.getboolean('logging', 'debug')
 audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
+default_permissions = cfg.get('homeagent', 'default_permissions)
+                              
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
 
@@ -87,7 +89,9 @@ for row in report:
             debuglog.write(debug_time + ': Attempting to create home directory ' + path + '\n')
         os.makedirs(path)
         os.chown(path, uid, gid)
-        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+        # Convert the default home directory permissions string from the config to an integer interpreted as octal
+        permissions = int(default_permissions, 8)
+        os.chmod(path, permissions)
 
         # Create .nedit subdirectory
         if debug:
