@@ -19,7 +19,7 @@ debug = cfg.getboolean('logging', 'debug')
 audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
-default_permissions = cfg.get('homeagent', 'default_permissions)
+default_permissions = cfg.get('homeagent', 'default_permissions')
                               
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
