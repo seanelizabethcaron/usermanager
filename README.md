@@ -133,7 +133,7 @@ CREATE TABLE smbpasswd_workqueue (
     ready boolean)
 ````
 
-The action column is intended to be one of either 'a' (add) or 'd' (disable). This is consistent with the command line options of smbpasswd for these respective actions.
+The action column is intended to be one of either 'a' (add), 'd' (disable) or 'e' (enable). This is consistent with the command line options of smbpasswd for these respective actions.
 
 ### U-M API Directory Integration
 
