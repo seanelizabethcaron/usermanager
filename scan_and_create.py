@@ -229,26 +229,30 @@ for row in report:
 
     os.spawnlp(os.P_WAIT, '/usr/cluster/bin/sacctmgr', '/usr/cluster/bin/sacctmgr', '-i', '-Q', 'create', 'user', uniqname, acct_assign, def_acct_assign, 'qoslevel=normal', 'defaultqos=normal')
 
-    # See if the user will have a Samba account created. If so then add the randomPassword to the smbpasswd_mailbox table record for that user and set the ready flag to TRUE
-    #  so that scan_and_create will process it
+    # See if the user will have a Samba account created
     curs = db.cursor()
-    query = 'SELECT * from smbpasswd_mailbox where uniqname = \'' + uniqname + '\' AND action = \'create\' AND ready = 0;'
+    query = 'SELECT * from samba where uniqname = \'' + uniqname + '\' AND created = 0;'
     curs.execute(query)
     result = curs.fetchone()
     
+    # If the user shows up in the samba table then we know that a Samba account is being created for them
     if result != None:
         create_samba = 1
+    
+    # If a Samba account is being created for the user, add their randomly generated password to the workqueue request and set the ready flag to TRUE
+    if create_samba:
+        curs = db.cursor()
+        query = 'UPDATE smbpasswd_workqueue SET password = \'' + randomPassword + '\', ready = 1 where uniqname = \'' + uniqname + '\';'
+        curs.execute(query)
+        db.commit()
+        
+        # We need to pull the home directory host of the user from the workqueue request so we can use that to populate the new user account email template later
+        curs = db.cursor()
+        query = 'SELECT * from smbpasswd_workqueue where uniqname = \'' + uniqname + '\';'
+        curs.execute(query)
+        result = curs.fetchone()
+        
         home_host = result[1]
-        
-        curs = db.cursor()
-        query = 'UPDATE smbpasswd_mailbox SET password = \'' + randomPassword + '\' where uniqname = \'' + uniqname + '\';'
-        curs.execute(query)
-        db.commit()
-        
-        curs = db.cursor()
-        query = 'UPDATE smbpasswd_mailbox SET ready = 1 where uniqname = \'' + uniqname + '\';'
-        curs.execute(query)
-        db.commit()
         
     # Update the database to note the account having been created
     curs = db.cursor()
