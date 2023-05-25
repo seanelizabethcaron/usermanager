@@ -626,7 +626,7 @@ db.commit()
 # Add users getting Samba accounts to the smbpasswd_mailbox table
 if create_samba:
     curs = db.cursor()
-    query = 'INSERT INTO smbpasswd_mailbox (host, uniqname, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',0);'
+    query = 'INSERT INTO smbpasswd_mailbox (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'create\',0);'
     curs.execute(query)
     db.commit()
     
