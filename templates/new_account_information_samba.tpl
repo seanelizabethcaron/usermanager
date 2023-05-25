@@ -32,17 +32,17 @@ Once you've completed the preliminaries, you will be able to log in to your assi
 <br><br>
 $SUGGESTED_HOSTS
 <br><br>
-Once you get logged in via SSH, run the following command to reset your Samba password to something of your choice with the following command:
+Once you get logged in via SSH, you can run the following command to reset your Samba password to something of your choice with the following command:
 <br><br>
 <tt>smbpasswd</tt>
 <br><br>
 Please follow best practices when setting your Samba password. A minimum password length of 16 characters is required and the password should include multiple character classes such as uppercase, lowercase, numerals and punctuation.
 <br><br>
-You must be on a U-M campus network or connected to the U-M VPN to access Samba. If this condition is satisfied, you may access Samba shares on $HOST by hitting the Windows key and typing:
+You must be on a U-M campus network or connected to the U-M VPN to access Samba. If this condition is satisfied, you may access Samba shares on $SAMBAHOST by hitting the Windows key and typing:
 <br><br>
-<tt>\\$HOST.sph.umich.edu</tt>
+<tt>\\$SAMBAHOST.sph.umich.edu</tt>
 <br><br>
-If you would like to map a drive letter to the Samba share on $HOST, you may do so by following the procedure below:
+If you would like to map a drive letter to the Samba share on $SAMBAHOST, you may do so by following the procedure below:
 <br><br>
 <a href="https://support.microsoft.com/en-us/windows/map-a-network-drive-in-windows-29ce55d1-34e3-a7e2-4801-131475f9557d">Map a network drive in Windows</a>
 <br><br>
