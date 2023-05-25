@@ -109,26 +109,37 @@ for row in report:
     modl = [(ldap.MOD_REPLACE, 'userPassword', [locked_pwd.encode()])]
     l.modify_s(dn, modl)
 
-    # Add a task to lock the Samba account to the smbpasswd_mailbox table
-    # First we need to figure out which host contains the user home directory
+    # Lock the Samba account if applicable
+    
+    # Determine if the user has a Samba account that is unlocked
     curs = db.cursor()
-    query = 'SELECT * FROM homes WHERE serialnum = ' + serialnum + ';'
+    query = 'SELECT * FROM samba WHERE uniqname = \' + uniqname + \' AND created = 1 AND locked = 0;'
     if debug:
         debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
     curs.execute(query)
     report = curs.fetchone()
-
-    home_host = report[1]
     
-    # Now insert the job into the smbpasswd_mailbox table
-    curs = db.cursor()
-    query = 'INSERT INTO smbpasswd_mailbox (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'disable\',1);'
-    if debug:
-        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
-        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
-    curs.execute(query)
-    db.commit()
+    # If the account exists in the Samba table as created, add a smbpasswd_workqueue entry to disable it
+    if result != None:
+        # First we need to figure out which host contains the user home directory
+        curs = db.cursor()
+        query = 'SELECT * FROM homes WHERE serialnum = ' + serialnum + ';'
+        if debug:
+            debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+            debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+        curs.execute(query)
+        report = curs.fetchone()
+
+        home_host = report[1]
+    
+        curs = db.cursor()
+        query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'d\',1);'
+        if debug:
+            debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+            debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+        curs.execute(query)
+        db.commit()
         
     # Update the database to note the account having been locked
     curs = db.cursor()
