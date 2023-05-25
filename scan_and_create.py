@@ -86,6 +86,7 @@ for row in report:
     curs.execute(query)
     report = curs.fetchone()
     homedir = report[2]
+    home_host = report[1]
 
     # Get the list of intended group memberships for the account
     curs = db.cursor()
@@ -246,14 +247,6 @@ for row in report:
         curs.execute(query)
         db.commit()
         
-        # We need to pull the home directory host of the user from the workqueue request so we can use that to populate the new user account email template later
-        curs = db.cursor()
-        query = 'SELECT * from smbpasswd_workqueue where uniqname = \'' + uniqname + '\';'
-        curs.execute(query)
-        result = curs.fetchone()
-        
-        home_host = result[1]
-        
     # Update the database to note the account having been created
     curs = db.cursor()
     query = 'UPDATE users SET created = 1 where uniqname = \'' + uniqname + '\';'
@@ -378,7 +371,26 @@ for row in report:
 
     # Unbind from the LDAP directory
     l.unbind_s()
-
+    
+    # Get the home directory host for this user so we can use that to populate a smbpasswd_workqueue entry
+    curs = db.cursor()
+    query = 'SELECT * FROM homes WHERE serialnum = ' + str(serialnum) + ';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    report = curs.fetchone()
+    home_host = report[1]
+    
+    # Create a smbpasswd_workqueue entry to reenable the Samba account of the user
+    curs = db.cursor()
+    query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'e\',1);'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+    
     # Update the database to flip the reactivate flag off since we are done
     curs = db.cursor()
     query = 'UPDATE users SET reactivate = 0 where uniqname = \'' + uniqname + '\';'
