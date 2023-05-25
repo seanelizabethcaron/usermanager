@@ -167,7 +167,7 @@ for row in report:
     # Create the Samba account for the user with the requisite password
     subprocess.run(["/usr/bin/smbpasswd", "-a", "-s", uniqname], input=prepped_password, text=True, capture_output=False)
     
-    # Remove the row from the smbpasswd_mailbox table since we are finished with it
+    # Remove the task from the smbpasswd_mailbox table since we are finished with it
     curs = db.cursor()
     query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND host = \'' + my_hostname + '\';'
     if debug:
@@ -189,10 +189,14 @@ report = curs.fetchall()
 for row in report:
     uniqname = row[2]
     
-    # Create the Samba account for the user with the requisite password
-    subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
-    
-    # Remove the row from the smbpasswd_mailbox table since we are finished with it
+    # Disable the Samba account for the user
+    # I don't love doing it this way but it makes handling Samba account disablement as stateless as possible
+    try:
+        subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
+    except FileNotFoundError:
+        pass
+      
+    # Remove the task from the smbpasswd_mailbox table since we are finished with it
     curs = db.cursor()
     query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND action = \'disable\' AND host = \'' + my_hostname + '\';'
     if debug:
