@@ -110,6 +110,16 @@ CREATE TABLE trainings (
     send_reminder boolean)
 ```
 
+Set up smbpasswd_mailbox table:
+
+````
+CREATE TABLE smbpasswd_mailbox (
+    serialnum integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    host varchar(64),
+    uniqname varchar(16),
+    password varchar(32),
+    ready boolean)
+````
 ### U-M API Directory Integration
 
 User Manager supports automatically adding the user to an MCommunity group when it is approved (for example, an all staff email announcement list).
