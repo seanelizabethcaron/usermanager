@@ -626,7 +626,7 @@ db.commit()
 # Add users getting Samba accounts to the samba and smbpasswd_workqueue tables
 if create_samba:
     curs = db.cursor()
-    query = 'INSERT INTO samba (host, uniqname, created, locked) VALUES (\'' + home_host + '\',\'' + uniqname + '\',0,0);'
+    query = 'INSERT INTO samba (serialnum, host, uniqname, created, locked) VALUES (' + str(found_serialnum) + ',\'' + home_host + '\',\'' + uniqname + '\',0,0);'
     curs.execute(query)
     db.commit()
     
