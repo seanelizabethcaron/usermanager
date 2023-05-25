@@ -229,7 +229,7 @@ for row in report:
     # See if the user will have a Samba account created. If so then add the randomPassword to the smbpasswd_mailbox table record for that user and set the ready flag to TRUE
     #  so that scan_and_create will process it
     curs = db.cursor()
-    query = 'SELECT * from smbpasswd_mailbox where uniqname = \'' + uniqname + '\' AND ready = 0;'
+    query = 'SELECT * from smbpasswd_mailbox where uniqname = \'' + uniqname + '\' AND action = \'create\' AND ready = 0;'
     curs.execute(query)
     result = curs.fetchone()
     
