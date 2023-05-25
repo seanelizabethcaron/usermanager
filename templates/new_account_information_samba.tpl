@@ -32,6 +32,13 @@ Once you've completed the preliminaries, you will be able to log in to your assi
 <br><br>
 $SUGGESTED_HOSTS
 <br><br>
+Your home directory host, $SAMBAHOST, supports access from a desktop computer via Samba.
+<br><br>
+When accessing Samba on $SAMBAHOST, please use the following credentials:
+<br><br>
+User name: <tt>$HOST.sph.umich.edu\$UNIQNAME</tt>
+Password: <tt>$RANDOMPASSWORD</tt>
+<br><br>
 Once you get logged in via SSH, you can run the following command to reset your Samba password to something of your choice with the following command:
 <br><br>
 <tt>smbpasswd</tt>
