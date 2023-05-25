@@ -128,11 +128,11 @@ CREATE TABLE smbpasswd_workqueue (
     host varchar(64),
     uniqname varchar(16),
     password varchar(32),
-    action varchar(8),
+    action varchar(1),
     ready boolean)
 ````
 
-The action column is intended to be one of either 'a' (add) or 'd' (disable). This is consistent with the command line options of smbpasswd.
+The action column is intended to be one of either 'a' (add) or 'd' (disable). This is consistent with the command line options of smbpasswd for these respective actions.
 
 ### U-M API Directory Integration
 
