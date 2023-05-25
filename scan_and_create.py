@@ -34,6 +34,7 @@ emailreceipt = cfg.getboolean('email', 'emailreceipt')
 emailreceiptdir = cfg.get('email', 'emailreceiptdir')
 
 newaccount_tpl = cfg.get('email', 'newaccount_tpl')
+newaccount_samba_tpl = cfg.get('email', 'newaccount_samba_tpl')
 
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
@@ -65,6 +66,8 @@ for row in report:
     email = row[5]
     role = row[12]
 
+    create_samba = 0
+    
     if debug:
         debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
         debuglog.write(debug_time + ': Scan and create processing account request:\n')
@@ -234,6 +237,9 @@ for row in report:
     result = curs.fetchone()
     
     if result != None:
+        create_samba = 1
+        home_host = result[1]
+        
         curs = db.cursor()
         query = 'UPDATE smbpasswd_mailbox SET password = \'' + randomPassword + '\' where uniqname = \'' + uniqname + '\';'
         curs.execute(query)
@@ -281,13 +287,21 @@ for row in report:
         suggested_hosts = '<tt>snowwhite.sph.umich.edu</tt><br><tt>dumbo.sph.umich.edu</tt><br><tt>fantasia.sph.umich.edu</tt><br><tt>wonderland.sph.umich.edu</tt>'
 
     # Send an e-mail to the new user with initial account information
-    with open(newaccount_tpl) as tp:
-        lines = tp.read()
+    if create_samba == 0:
+        with open(newaccount_tpl) as tp:
+            lines = tp.read()
 
-    tpl = Template(lines)
+        tpl = Template(lines)
 
-    emailtext = tpl.substitute(FIRSTNAME=firstname, UNIQNAME=uniqname, RANDOMPASSWORD=randomPassword, NODEORNODES=node_or_nodes, SUGGESTED_HOSTS=suggested_hosts)
-
+        emailtext = tpl.substitute(FIRSTNAME=firstname, UNIQNAME=uniqname, RANDOMPASSWORD=randomPassword, NODEORNODES=node_or_nodes, SUGGESTED_HOSTS=suggested_hosts)
+    else:
+        with open(newaccount_samba_tpl) as tp:
+            lines = tp.read()
+            
+        tpl = Template(lines)
+        
+        emailtext = tpl.substitute(FIRSTNAME=firstname, UNIQNAME=uniqname, RANDOMPASSWORD=randomPassword, NODEORNODES=node_or_nodes, SUGGESTED_HOSTS=suggested_hosts, SAMBAHOST=home_host)
+        
     msg = MIMEMultipart('alternative')
 
     msg['Subject'] = 'New CSG cluster account information for ' + uniqname
