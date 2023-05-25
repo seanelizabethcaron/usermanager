@@ -623,10 +623,15 @@ query = 'INSERT INTO trainings (serialnum, topmed_user, dce101_comp, itse106_com
 curs.execute(query)
 db.commit()
 
-# Add users getting Samba accounts to the smbpasswd_mailbox table
+# Add users getting Samba accounts to the samba and smbpasswd_workqueue tables
 if create_samba:
     curs = db.cursor()
-    query = 'INSERT INTO smbpasswd_mailbox (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'create\',0);'
+    query = 'INSERT INTO samba (host, uniqname, locked) VALUES (\'' + home_host + '\',\'' + uniqname + '\',0);'
+    curs.execute(query)
+    db.commit()
+    
+    curs = db.cursor()
+    query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'a\',0);'
     curs.execute(query)
     db.commit()
     
