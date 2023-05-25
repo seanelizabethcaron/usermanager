@@ -122,7 +122,7 @@ CREATE TABLE smbpasswd_mailbox (
     ready boolean)
 ````
 
-The action column is intended to be one of either 'create' or 'delete'.
+The action column is intended to be one of either 'create' or 'disable'.
 
 ### U-M API Directory Integration
 
