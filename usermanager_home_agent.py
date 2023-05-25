@@ -149,14 +149,14 @@ for row in report:
             
 # Check to see if we have any smbpasswd account creation work to do
 curs = db.cursor()
-query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND action = \'create\' AND host = \'' + my_hostname + '\';'
+query = 'SELECT * FROM smbpasswd_workqueue WHERE ready = 1 AND action = \'a\' AND host = \'' + my_hostname + '\';'
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
     debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
 curs.execute(query)
 report = curs.fetchall()
 
-# For each entry in smbpasswd_mailbox for this host with action create, build a Samba account for that user
+# For each entry in smbpasswd_workqueue for this host with action add, add a Samba account for that user
 for row in report:
     uniqname = row[2]
     password = row[3]
@@ -167,9 +167,9 @@ for row in report:
     # Create the Samba account for the user with the requisite password
     subprocess.run(["/usr/bin/smbpasswd", "-a", "-s", uniqname], input=prepped_password, text=True, capture_output=False)
     
-    # Remove the task from the smbpasswd_mailbox table since we are finished with it
+    # Remove the task from the smbpasswd_workqueue table since we are finished with it
     curs = db.cursor()
-    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND host = \'' + my_hostname + '\';'
+    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND action = \'a\' AND host = \'' + my_hostname + '\';'
     if debug:
         debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
@@ -178,29 +178,69 @@ for row in report:
 
 # Check to see if we have any smbpasswd account disablement work to do
 curs = db.cursor()
-query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND action = \'disable\' AND host = \'' + my_hostname + '\';'
+query = 'SELECT * FROM smbpasswd_workqueue WHERE ready = 1 AND action = \'d\' AND host = \'' + my_hostname + '\';'
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
     debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
 curs.execute(query)
 report = curs.fetchall()
 
-# For each entry in smbpasswd_mailbox for this host with action disable, disable the Samba account for that user
+# For each entry in smbpasswd_workqueue for this host with action disable, disable the Samba account for that user
 for row in report:
     uniqname = row[2]
     
     # Disable the Samba account for the user
-    # I don't love doing it this way but it makes handling Samba account disablement as stateless as possible
-    try:
-        subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
-    except FileNotFoundError:
-        pass
-      
-    # Remove the task from the smbpasswd_mailbox table since we are finished with it
+    subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
+    
+    # Record the Samba account as being locked in our tracking database
     curs = db.cursor()
-    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND action = \'disable\' AND host = \'' + my_hostname + '\';'
+    query = 'UPDATE samba SET locked = 1 where uniqname = \'' + uniqname + '\';'
     if debug:
         debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
     curs.execute(query)
     db.commit()
+
+    # Remove the task from the smbpasswd_workqueue table since we are finished with it
+    curs = db.cursor()
+    query = 'DELETE FROM smbpasswd_workqueue WHERE uniqname = \'' + uniqname + '\' AND action = \'d\' AND host = \'' + my_hostname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+    
+# Check to see if we have any smbpasswd account enablement work to do
+curs = db.cursor()
+query = 'SELECT * FROM smbpasswd_workqueue WHERE ready = 1 AND action = \'e\' AND host = \'' + my_hostname + '\';'
+if debug:
+    debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+    debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+curs.execute(query)
+report = curs.fetchall()
+
+# For each entry in smbpasswd_workqueue for this host with action enable, enable the Samba account for that user
+for row in report:
+    uniqname = row[2]
+    
+    # Enable the Samba account for the user
+    subprocess.run(["/usr/bin/smbpasswd", "-e", uniqname], input=None, text=True, capture_output=False)
+    
+    # Record the Samba account as being unlocked in our tracking database
+    curs = db.cursor()
+    query = 'UPDATE samba SET locked = 0 where uniqname = \'' + uniqname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+
+    # Remove the task from the smbpasswd_workqueue table since we are finished with it
+    curs = db.cursor()
+    query = 'DELETE FROM smbpasswd_workqueue WHERE uniqname = \'' + uniqname + '\' AND action = \'e\' AND host = \'' + my_hostname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+
