@@ -4,7 +4,7 @@
 # Requires packages: python3-ldap, python3-mysqldb
 #
 
-import sys,os,cgi,time,MySQLdb,configparser,smtplib,string,random,platform,os,shutil,stat,pwd,grp
+import sys,os,subprocess,cgi,time,MySQLdb,configparser,smtplib,string,random,platform,os,shutil,stat,pwd,grp
 
 cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
@@ -146,4 +146,34 @@ for row in report:
         if audit:
             audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
             auditlog.write(audit_time + ': Created home directory and dotfiles for user ' + uniqname + '\n')
+            
+# Check to see if we have any smbpasswd work to do
+curs = db.cursor()
+query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND host = \'' + my_hostname + '\';'
+if debug:
+    debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+    debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+curs.execute(query)
+report = curs.fetchall()
 
+# For each entry in smbpasswd_mailbox for this host, build a Samba account for that user
+for row in report:
+    home_host = row[1]
+    uniqname = row[2]
+    password = row[3]
+    
+    # Prepare the password in the format that smbpasswd expects to be piped
+    prepped_password = password + '\n' + password + '\n'
+    
+    # Create the Samba account for the user with the requisite password
+    subprocess.run(["/usr/bin/smbpasswd", "-a", "-s", uniqname], input=prepped_password, text=True, capture_output=False)
+    
+    # Remove the row from the smbpasswd_mailbox table since we are finished with it
+    curs = db.cursor()
+    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND host = \'' + my_hostname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+    
