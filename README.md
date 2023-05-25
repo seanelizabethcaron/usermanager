@@ -117,6 +117,7 @@ CREATE TABLE samba (
     serialnum integer NOT NULL PRIMARY KEY,
     host varchar(64),
     uniqname varchar(16),
+    created boolean,
     locked boolean)
 ````
 
