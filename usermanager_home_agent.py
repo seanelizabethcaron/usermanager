@@ -167,9 +167,18 @@ for row in report:
     # Create the Samba account for the user with the requisite password
     subprocess.run(["/usr/bin/smbpasswd", "-a", "-s", uniqname], input=prepped_password, text=True, capture_output=False)
     
+    # Record the Samba account as being created in our tracking database
+    curs = db.cursor()
+    query = 'UPDATE samba SET created = 1 where uniqname = \'' + uniqname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
+    
     # Remove the task from the smbpasswd_workqueue table since we are finished with it
     curs = db.cursor()
-    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND action = \'a\' AND host = \'' + my_hostname + '\';'
+    query = 'DELETE FROM smbpasswd_workqueue WHERE uniqname = \'' + uniqname + '\' AND action = \'a\' AND host = \'' + my_hostname + '\';'
     if debug:
         debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
