@@ -226,6 +226,24 @@ for row in report:
 
     os.spawnlp(os.P_WAIT, '/usr/cluster/bin/sacctmgr', '/usr/cluster/bin/sacctmgr', '-i', '-Q', 'create', 'user', uniqname, acct_assign, def_acct_assign, 'qoslevel=normal', 'defaultqos=normal')
 
+    # See if the user will have a Samba account created. If so then add the randomPassword to the smbpasswd_mailbox table record for that user and set the ready flag to TRUE
+    #  so that scan_and_create will process it
+    curs = db.cursor()
+    query = 'SELECT * from smbpasswd_mailbox where uniqname = \'' + uniqname + '\' AND ready = 0;'
+    curs.execute(query)
+    result = curs.fetchone()
+    
+    if result != None:
+        curs = db.cursor()
+        query = 'UPDATE smbpasswd_mailbox SET password = \'' + randomPassword + '\' where uniqname = \'' + uniqname + '\';'
+        curs.execute(query)
+        db.commit()
+        
+        curs = db.cursor()
+        query = 'UPDATE smbpasswd_mailbox SET ready = 1 where uniqname = \'' + uniqname + '\';'
+        curs.execute(query)
+        db.commit()
+        
     # Update the database to note the account having been created
     curs = db.cursor()
     query = 'UPDATE users SET created = 1 where uniqname = \'' + uniqname + '\';'
@@ -234,7 +252,7 @@ for row in report:
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
     curs.execute(query)
     db.commit()
-
+    
     # Update the audit log
     if audit:
         audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
