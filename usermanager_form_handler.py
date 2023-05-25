@@ -295,6 +295,9 @@ if len(approver) > 8 or not sanitize(approver):
     generate_html_footer()
     sys.exit(0)
 
+# Do we want to create a Samba account when we provision the home directory?
+create_samba = 0
+
 # Transform the specified role into a home directory and any associated
 # additional group memberships
 if role == 'alumni_user':
@@ -346,6 +349,7 @@ elif role == 'fritsche_user':
     home_host = 'junglebook'
     homedir = '/net/junglebook/home/' + uniqname
 elif role == 'kardiasmith_user':
+    create_samba = 1
     home_host = 'orion'
     homedir = '/net/orion/home/' + uniqname
 
@@ -619,6 +623,13 @@ query = 'INSERT INTO trainings (serialnum, topmed_user, dce101_comp, itse106_com
 curs.execute(query)
 db.commit()
 
+# Add users getting Samba accounts to the smbpasswd_mailbox table
+if create_samba:
+    curs = db.cursor()
+    query = 'INSERT INTO smbpasswd_mailbox (host, uniqname, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',0);'
+    curs.execute(query)
+    db.commit()
+    
 # Update the audit log
 if audit:
     audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
@@ -627,7 +638,7 @@ if audit:
     auditlog.write(audit_time + ': Contact email = ' + email + '\n')
     auditlog.write(audit_time + ': Title = ' + title + ' Reason = ' + reason + '\n')
     auditlog.write(audit_time + ': Role = ' + role + '\n')
-    auditlog.write(audit_time + ': Groups = ' + groups + ' Home directory = ' + homedir + '\n')
+    auditlog.write(audit_time + ': Groups = ' + groups + ' Home directory = ' + homedir + ' Create Samba account = ' + str(create_samba) + '\n')
     auditlog.write(audit_time + ': Start date = ' + startdate + ' Expiry date = ' + expirydate + '\n')
     auditlog.close()
 
