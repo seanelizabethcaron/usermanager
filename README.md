@@ -118,8 +118,12 @@ CREATE TABLE smbpasswd_mailbox (
     host varchar(64),
     uniqname varchar(16),
     password varchar(32),
+    action varchar(8),
     ready boolean)
 ````
+
+The action column is intended to be one of either 'create' or 'delete'.
+
 ### U-M API Directory Integration
 
 User Manager supports automatically adding the user to an MCommunity group when it is approved (for example, an all staff email announcement list).
