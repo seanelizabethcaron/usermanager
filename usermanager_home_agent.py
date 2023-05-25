@@ -147,18 +147,17 @@ for row in report:
             audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
             auditlog.write(audit_time + ': Created home directory and dotfiles for user ' + uniqname + '\n')
             
-# Check to see if we have any smbpasswd work to do
+# Check to see if we have any smbpasswd account creation work to do
 curs = db.cursor()
-query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND host = \'' + my_hostname + '\';'
+query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND action = \'create\' AND host = \'' + my_hostname + '\';'
 if debug:
     debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
     debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
 curs.execute(query)
 report = curs.fetchall()
 
-# For each entry in smbpasswd_mailbox for this host, build a Samba account for that user
+# For each entry in smbpasswd_mailbox for this host with action create, build a Samba account for that user
 for row in report:
-    home_host = row[1]
     uniqname = row[2]
     password = row[3]
     
@@ -176,4 +175,28 @@ for row in report:
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
     curs.execute(query)
     db.commit()
+
+# Check to see if we have any smbpasswd account disablement work to do
+curs = db.cursor()
+query = 'SELECT * FROM smbpasswd_mailbox WHERE ready = 1 AND action = \'disable\' AND host = \'' + my_hostname + '\';'
+if debug:
+    debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+    debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+curs.execute(query)
+report = curs.fetchall()
+
+# For each entry in smbpasswd_mailbox for this host with action disable, disable the Samba account for that user
+for row in report:
+    uniqname = row[2]
     
+    # Create the Samba account for the user with the requisite password
+    subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
+    
+    # Remove the row from the smbpasswd_mailbox table since we are finished with it
+    curs = db.cursor()
+    query = 'DELETE FROM smbpasswd_mailbox WHERE uniqname = \'' + uniqname + '\' AND action = \'disable\' AND host = \'' + my_hostname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    db.commit()
