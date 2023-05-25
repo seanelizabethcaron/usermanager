@@ -110,10 +110,20 @@ CREATE TABLE trainings (
     send_reminder boolean)
 ```
 
-Set up smbpasswd_mailbox table:
+Set up samba table:
 
 ````
-CREATE TABLE smbpasswd_mailbox (
+CREATE TABLE samba (
+    serialnum integer NOT NULL PRIMARY KEY,
+    host varchar(64),
+    uniqname varchar(16),
+    locked boolean)
+````
+
+Set up smbpasswd_workqueue table:
+
+````
+CREATE TABLE smbpasswd_workqueue (
     serialnum integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
     host varchar(64),
     uniqname varchar(16),
@@ -122,7 +132,7 @@ CREATE TABLE smbpasswd_mailbox (
     ready boolean)
 ````
 
-The action column is intended to be one of either 'create' or 'disable'.
+The action column is intended to be one of either 'a' (add) or 'd' (disable). This is consistent with the command line options of smbpasswd.
 
 ### U-M API Directory Integration
 
