@@ -68,6 +68,24 @@ curs.execute(query)
 db.commit()
 
 print 'Trainings table created\n'
+print 'Creating samba table ...\n'
+
+# Create samba table
+curs = db.cursor()
+query = 'CREATE TABLE samba (serialnum integer NOT NULL PRIMARY KEY, host varchar(64), uniqname varchar(16), created boolean, locked boolean);'
+curs.execute(query)
+db.commit()
+
+print 'Samba table created\n'
+print 'Creating smbpasswd_workqueue table ...\n'
+
+# Create smbpasswd_workqueue table
+curs = db.cursor()
+query = 'CREATE TABLE smbpasswd_workqueue (serialnum integer NOT NULL AUTO_INCREMENT PRIMARY KEY, host varchar(64), uniqname varchar(16), password varchar(32), action varchar(1), ready boolean);'
+curs.execute(query)
+db.commit()
+
+print 'Smbpasswd_workqueue table created\n'
 
 print 'User Manager DB schema setup complete!\n'
 
