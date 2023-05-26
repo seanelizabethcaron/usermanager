@@ -168,26 +168,33 @@ for username in report:
         query = 'UPDATE trainings SET held_since = \'0000-00-00\' WHERE serialnum = ' + str(serialnum) + ';'
         local_curs.execute(query)
 
-        # Unlock the samba account
+        # Unlock the samba account if applicable
         
-        # Get the home directory host for the account
         curs = db.cursor()
-        query = 'SELECT * FROM homes WHERE serialnum = ' + str(serialnum) + ';'
-        if debug:
-            debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
-            debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+        query = 'SELECT * from samba where uniqname = \'' + uniqname + '\';'
         curs.execute(query)
-        report = curs.fetchone()
-        home_host = report[1]
+        result = curs.fetchone()
+    
+        # If the user shows up in the samba table then we know that a Samba account exists for them
+        if result != None:
+            # Get the home directory host for the account
+            curs = db.cursor()
+            query = 'SELECT * FROM homes WHERE serialnum = ' + str(serialnum) + ';'
+            if debug:
+                debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+                debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+            curs.execute(query)
+            report = curs.fetchone()
+            home_host = report[1]
 
-        # Create a smbpasswd_workqueue entry to reenable the Samba account of the user
-        curs = db.cursor()
-        query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'e\',1);'
-        if debug:
-            debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
-            debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
-        curs.execute(query)
-        db.commit()
+            # Create a smbpasswd_workqueue entry to reenable the Samba account of the user
+            curs = db.cursor()
+            query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'e\',1);'
+            if debug:
+                debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+                debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+            curs.execute(query)
+            db.commit()
 
         if audit:
             audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
