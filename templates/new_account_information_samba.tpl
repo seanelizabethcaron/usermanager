@@ -32,7 +32,7 @@ Once you've completed the preliminaries, you will be able to log in to your assi
 <br><br>
 $SUGGESTED_HOSTS
 <br><br>
-Your home directory host, $SAMBAHOST, supports access from a desktop computer via Samba.
+Your cluster gateway host, $SAMBAHOST, also supports access to file shares from a desktop computer via Samba.
 <br><br>
 When accessing Samba on $SAMBAHOST, please use the following credentials:
 <br><br>
@@ -43,9 +43,11 @@ Once you get logged in via SSH, you can run the following command to reset your 
 <br><br>
 <tt>smbpasswd</tt>
 <br><br>
+Note that due to technical constraints, your cluster login password and Samba password cannot be automatically synchronized on the CSG cluster. You must manage the two passwords separately via their respective mechanisms (though you can use the same password for both).
+<br><br>
 Please follow best practices when setting your Samba password. A minimum password length of 16 characters is required and the password should include multiple character classes such as uppercase, lowercase, numerals and punctuation.
 <br><br>
-You must be on a U-M campus network or connected to the U-M VPN to access Samba. If this condition is satisfied, you may access Samba shares on $SAMBAHOST by hitting the Windows key and typing:
+You must be on a U-M campus network or connected to the U-M VPN to access Samba. You must also have completed the required data security training modules on MAIS LINC as described earlier in this message. If these conditions are satisfied, you may access Samba shares on $SAMBAHOST by hitting the Windows key and typing:
 <br><br>
 <tt>\\$SAMBAHOST.sph.umich.edu</tt>
 <br><br>
