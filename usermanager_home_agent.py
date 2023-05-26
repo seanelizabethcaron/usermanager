@@ -167,6 +167,29 @@ for row in report:
     # Create the Samba account for the user with the requisite password
     subprocess.run(["/usr/bin/smbpasswd", "-a", "-s", uniqname], input=prepped_password, text=True, capture_output=False)
     
+    # If the user account is locked pending completion of training modules, lock the Samba account after creating it
+    
+    # Determine the serial number of this user account so we can find it in the trainings table
+    curs = db.cursor()
+    query = 'SELECT * FROM users WHERE uniqname = \'' + uniqname + '\';'
+    if debug:
+        debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+    curs.execute(query)
+    report = curs.fetchone()
+    
+    serialnum = report[0]
+    
+    # Determine if the account is held pending completion of training modules
+    curs = db.cursor()
+    query = 'SELECT held_pending FROM trainings WHERE serialnum = ' + str(serialnum) + ';'
+    curs.execute(query)
+    held_pending = curs.fetchone()
+
+    # If so then lock the Samba account until the training modules are completed.
+    if held_pending[0]:
+        subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
+        
     # Record the Samba account as being created in our tracking database
     curs = db.cursor()
     query = 'UPDATE samba SET created = 1 where uniqname = \'' + uniqname + '\';'
