@@ -121,7 +121,7 @@ for row in report:
     report = curs.fetchone()
     
     # If the account exists in the Samba table as created, add a smbpasswd_workqueue entry to disable it
-    if result != None:
+    if report != None:
         # First we need to figure out which host contains the user home directory
         curs = db.cursor()
         query = 'SELECT * FROM homes WHERE serialnum = ' + serialnum + ';'
