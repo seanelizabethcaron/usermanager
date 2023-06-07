@@ -190,6 +190,15 @@ for row in report:
     if held_pending[0]:
         subprocess.run(["/usr/bin/smbpasswd", "-d", uniqname], input=None, text=True, capture_output=False)
         
+        # Record the Samba account as being locked in our tracking database
+        curs = db.cursor()
+        query = 'UPDATE samba SET locked = 1 where uniqname = \'' + uniqname + '\';'
+        if debug:
+            debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+            debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
+        curs.execute(query)
+        db.commit()
+    
     # Record the Samba account as being created in our tracking database
     curs = db.cursor()
     query = 'UPDATE samba SET created = 1 where uniqname = \'' + uniqname + '\';'
