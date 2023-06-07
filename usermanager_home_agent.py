@@ -217,6 +217,14 @@ for row in report:
     curs.execute(query)
     db.commit()
 
+    # Update the audit log
+    if audit:
+        audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        if held_pending[0]:
+            auditlog.write(audit_time + ': Created Samba account for user ' + uniqname + ' (locked pending completion of training)\n')
+        else:
+            auditlog.write(audit_time + ': Created Samba account for user ' + uniqname + '\n')
+            
 # Check to see if we have any smbpasswd account disablement work to do
 curs = db.cursor()
 query = 'SELECT * FROM smbpasswd_workqueue WHERE ready = 1 AND action = \'d\' AND host = \'' + my_hostname + '\';'
@@ -251,6 +259,11 @@ for row in report:
     curs.execute(query)
     db.commit()
     
+    # Update the audit log
+    if audit:
+        audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        auditlog.write(audit_time + ': Disabled Samba account for user ' + uniqname + '\n')
+
 # Check to see if we have any smbpasswd account enablement work to do
 curs = db.cursor()
 query = 'SELECT * FROM smbpasswd_workqueue WHERE ready = 1 AND action = \'e\' AND host = \'' + my_hostname + '\';'
@@ -284,4 +297,9 @@ for row in report:
         debuglog.write(debug_time + ': SQL query string is ' + query + '\n')
     curs.execute(query)
     db.commit()
+
+    # Update the audit log
+    if audit:
+        audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
+        auditlog.write(audit_time + ': Enabled Samba account for user ' + uniqname + '\n')
 
