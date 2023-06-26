@@ -20,7 +20,8 @@ audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
 default_permissions = cfg.get('homeagent', 'default_permissions')
-                              
+default_group = cfg.get('homeagent', 'default_group')
+
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
 
@@ -71,14 +72,14 @@ for row in report:
 
     # Only try to set up the home directory once the account is actually created in LDAP
     if created == 1:
-        # Dereference the uniqname to a numeric UID and GID (assume statgen-users for initial GID) we can use with os.chown()
+        # Dereference the uniqname to a numeric UID and GID we can use with os.chown()
         #  Double check we can actually resolve this user before proceeding, otherwise exit and wait for the next run
         try:
             uid = pwd.getpwnam(uniqname).pw_uid
         except KeyError:
             sys.exit(0)
 
-        gid = grp.getgrnam('statgen-users').gr_gid
+        gid = grp.getgrnam(default_group).gr_gid
         if debug:
             debug_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
             debuglog.write(debug_time + ': Dereferencing user ' + uniqname + ' to UID ' + str(uid) + ' with GID ' + str(gid) + '\n')
