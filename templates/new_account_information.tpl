@@ -36,7 +36,7 @@ Note that if you are working off campus, the University of Michigan now requires
 s. Logging in to the U-M VPN will require the use of your U-M uniqname password, which is the same password that you will use to access MAIS LINC and complet
 e the required data security training modules. Documentation for the U-M VPN and installers for the U-M VPN client may be found at the following URL:
 <br><br>
-<tt><a href="https://its.umich.edu/enterprise/wifi-networks/vpn/getting-started">https://its.umich.edu/enterprise/wifi-networks/vpn/getting-started</a>
+<tt><a href="https://its.umich.edu/enterprise/wifi-networks/vpn/getting-started">https://its.umich.edu/enterprise/wifi-networks/vpn/getting-started</a></tt>
 <br><br>
 Please contact our IT help desk at <a href="mailto:csg.help@umich.edu">csg.help@umich.edu</a> with any questions or trouble.
 <br><br>
