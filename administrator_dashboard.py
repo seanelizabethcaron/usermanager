@@ -57,6 +57,9 @@ debug = cfg.getboolean('logging', 'debug')
 audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
+administrators = cfg.get('administrators', 'administrators')
+admins = administrators.split('')
+
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
 
@@ -384,8 +387,6 @@ else:
     print('<table>')
     print('<form action="/cgi-bin/usermanager/administrator_dashboard.py" method="POST">')
     print('<tr><th>Select</th><th>Toggle lock</th><th>First name</th><th>Last name</th><th>Uniqname</th><th>Contact e-mail</th><th>Expiry date</th><th>Groups</th></tr>')
-
-    admins = ['scaron', 'sdushett']
 
     curs = db.cursor()
     if approver in admins:
