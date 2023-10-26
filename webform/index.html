@@ -64,7 +64,7 @@
         <input type="date" id="expirydate" name="expirydate">
       </div>
       <div>
-        <label for="topmed_user">Working on TOPMED?</label>
+        <label for="topmed_user">Require CUI training?</label>
         <input type="checkbox" id="topmed_user" name="topmed_user">
       </div>
       <div>
@@ -83,7 +83,7 @@
       <li>Users <b>must</b> at minimum have membership in the <tt>statgen-users</tt> group in order to log on to snowwhite, dumbo, fantasia or wonderland.
       <li>If the account will require membership in multiple groups, please specify a <b>comma separated</b> list of groups.
       <li>All users must complete the DCE 101 training module on MAIS LINC before their account will be available to use.
-      <li>If a user will be working on the TOPMED project, please check the associated box. Users working on the TOPMED project must complete both the DCE 101 and ITSE 106 training modules on MAIS LINC before their account will be available to use.
+      <li><b>If a user will be working on the TOPMED project or is affiliated with the Kardia-Smith lab, please check the Require CUI training box</b>. Users working on the TOPMED project and Kardia-Smith lab affiliates will be required to complete both the DCE 101 and ITSE 106 training modules on MAIS LINC before their account will be available to use.
       <li>Users will receive an email automatically with links to their required training modules once their account request is approved.
       </ul>
     </div>
@@ -123,6 +123,7 @@
             }
 
             else if (strRole == "Kardia/Smith Lab user") {
+                document.getElementById('topmed_user').checked = true;
                 document.getElementById('groups').value = "statgen-users,server-orion";
             }
 
