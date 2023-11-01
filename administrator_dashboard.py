@@ -446,7 +446,7 @@ else:
             print('<tr bgcolor=#e6ffe6><td>')
         # If held pending completion of training modules highlight in yellow
         elif held_pending == 1:
-            print('<tr bgcolor=#fffaa0><td>')
+            print('<tr bgcolor=#faa0a0><td>')
         # If locked or set to expire highlight in red
         else:
             print('<tr bgcolor=#ffffcc><td>')
@@ -474,7 +474,7 @@ else:
     print('<div class="footer">')
     print('<button type="submit" name="updateusers">Update fields for selected user</button>')
     print('<p>')
-    print('<i>' + total_users + ' total users (' + unlocked_users + ' active, ' + locked_users + ' locked, ' + held_pending_users + ' held pending')</i>')
+    print('<i>' + total_users + ' total users (' + unlocked_users + ' active, ' + locked_users + ' locked, ' + held_pending_users + ' held pending)</i>')
     print('</div>')
     print('</body>')
     print('</html>')
