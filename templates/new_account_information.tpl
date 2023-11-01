@@ -12,7 +12,7 @@ Password: <tt>$RANDOMPASSWORD</tt>
 <br><br>
 First thing you receive this message, please take 30-60 minutes to sign on to U-M MAIS LINC and complete the <A HREF="https://maislinc.umich.edu/maislinc/app/management/LMS_ActDetails.aspx?UserMode=0&ActivityId=47169">DCE 101: Access and Compliance: Handling Sensitive Institutional Data at U-M</A> e-learning module.
 <br><br>
-If you are working on the TOPMED project, please also complete the MAIS LINC <A HREF="https://maislinc.umich.edu/core/pillarRedirect?relyingParty=LM&url=app%2Fmanagement%2FLMS_ActDetails.aspx%3FActivityId%3D44659%26UserMode%3D0">Securing Controlled Unclassified Information</A> module.
+If you are working on the TOPMED project or if you are affiliated with the Kardia-Smith lab, please also complete the MAIS LINC <A HREF="https://maislinc.umich.edu/core/pillarRedirect?relyingParty=LM&url=app%2Fmanagement%2FLMS_ActDetails.aspx%3FActivityId%3D44659%26UserMode%3D0">Securing Controlled Unclassified Information</A> module.
 <br><br>
 You will need your U-M uniqname password to log in to MAIS LINC to complete the training modules. If you are a sponsored external affiliate and did not receive your U-M uniqname password, please reach out to your collaborator at CSG who is sponsoring your account.
 <br><br>
