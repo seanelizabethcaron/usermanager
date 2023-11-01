@@ -441,15 +441,17 @@ else:
         curs.execute(query)
         groups = curs.fetchall()
 
-        # If unlocked and not set to expire highlight in green
-        if locked_or_unlocked == 0:
-            print('<tr bgcolor=#e6ffe6><td>')
         # If held pending completion of training modules highlight in yellow
-        elif held_pending == 1:
+        if held_pending == 1:
             print('<tr bgcolor=#faa0a0><td>')
-        # If locked or set to expire highlight in red
         else:
-            print('<tr bgcolor=#ffffcc><td>')
+            # If unlocked and not set to expire highlight in green
+            if locked_or_unlocked == 0:
+                print('<tr bgcolor=#e6ffe6><td>')
+            # If locked or set to expire highlight in red
+            else:
+                print('<tr bgcolor=#ffffcc><td>')
+                
         print('<input type="radio" name="selectuser" value="' + uniqname + '">')
         print('</td><td>')
         print('<input type="checkbox" name="togglelock" value="' + uniqname + '">')
