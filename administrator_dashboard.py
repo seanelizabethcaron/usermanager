@@ -443,14 +443,14 @@ else:
 
         # If held pending completion of training modules highlight in yellow
         if held_pending == 1:
-            print('<tr bgcolor=#faa0a0><td>')
+            print('<tr bgcolor=#fffaa0><td>')
         else:
             # If unlocked and not set to expire highlight in green
             if locked_or_unlocked == 0:
-                print('<tr bgcolor=#e6ffe6><td>')
+                print('<tr bgcolor=#c1e1c1><td>')
             # If locked or set to expire highlight in red
             else:
-                print('<tr bgcolor=#ffffcc><td>')
+                print('<tr bgcolor=#faa0a0><td>')
                 
         print('<input type="radio" name="selectuser" value="' + uniqname + '">')
         print('</td><td>')
