@@ -58,7 +58,7 @@ audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
 administrators = cfg.get('administrators', 'administrators')
-admins = administrators.split('')
+admins = administrators.split(',')
 
 # Set umask such that both root and www-data can write to logfiles
 os.umask(0o011)
