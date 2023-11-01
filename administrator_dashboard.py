@@ -390,9 +390,9 @@ else:
 
     curs = db.cursor()
     if approver in admins:
-        query = 'SELECT * from users where created = 1;'
+        query = 'SELECT users.*, trainings.held_pending FROM users RIGHT JOIN trainings ON users.serialnum = trainings.serialnum WHERE users.created = 1;'
     else:
-        query = 'SELECT * from users where approver = \'' + approver + '\' and created = 1;'
+        query = 'SELECT users.*, trainings.held_pending FROM users RIGHT JOIN trainings ON users.serialnum = trainings.serialnum WHERE approver = \'' + approver + '\' and created = 1;'
     curs.execute(query)
     users = curs.fetchall()
 
@@ -414,6 +414,12 @@ else:
     result = curs.fetchone()
     locked_users = str(result[0])
 
+    curs = db.cursor()
+    query = 'SELECT COUNT(*) FROM trainings WHERE held_pending = 1;'
+    curs.execute(query)
+    result = curs.fetchone()
+    held_pending_users = str(result[0])
+    
     todays_date = time.strftime("%Y-%m-%d", time.localtime())
 
     toggle = 0
@@ -428,7 +434,8 @@ else:
         enddate = user[8]
         locked_or_unlocked = user[17]
         reactivate = user[18]
-
+        held_pending = user[19]
+        
         curs = db.cursor()
         query = 'SELECT * from groups where serialnum = ' + str(serial) + ';'
         curs.execute(query)
@@ -437,6 +444,9 @@ else:
         # If unlocked and not set to expire highlight in green
         if locked_or_unlocked == 0:
             print('<tr bgcolor=#e6ffe6><td>')
+        # If held pending completion of training modules highlight in yellow
+        elif held_pending = 1:
+            print('<tr bgcolor=#fffaa0><td>')
         # If locked or set to expire highlight in red
         else:
             print('<tr bgcolor=#ffffcc><td>')
@@ -464,7 +474,7 @@ else:
     print('<div class="footer">')
     print('<button type="submit" name="updateusers">Update fields for selected user</button>')
     print('<p>')
-    print('<i>' + total_users + ' total users (' + unlocked_users + ' active, ' + locked_users + ' locked)</i>')
+    print('<i>' + total_users + ' total users (' + unlocked_users + ' active, ' + locked_users + ' locked, ' + held_pending_users + ' held pending')</i>')
     print('</div>')
     print('</body>')
     print('</html>')
