@@ -445,7 +445,7 @@ else:
         if locked_or_unlocked == 0:
             print('<tr bgcolor=#e6ffe6><td>')
         # If held pending completion of training modules highlight in yellow
-        elif held_pending = 1:
+        elif held_pending == 1:
             print('<tr bgcolor=#fffaa0><td>')
         # If locked or set to expire highlight in red
         else:
