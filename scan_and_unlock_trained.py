@@ -87,8 +87,8 @@ for username in report:
     else:
         dce101_completed = 1
 
-    # Determine ITSE 106 completion status
-    query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'ITS_ITSE106\') and d.Username in (\'' + uniqname + '\');'
+    # Determine ITSE 106 completion status (note that this MAIS LINC course is now known as PEERRS_CUI_T100)
+    query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_CUI_T100 \') and d.Username in (\'' + uniqname + '\');'
 
     mais_cursor.execute(query)
     result = mais_cursor.fetchone()
@@ -233,7 +233,7 @@ for username in report:
             # So there are a bunch of cases to handle here:
             # If not topmed_user and dce101_completed = FALSE then send reminder with link to DCE 101
             # If topmed_user and dce101_completed = FALSE and itse106_completed = TRUE then send reminder with link to DCE 101
-            # If topmed_user and dce101_completed = TRUE and itse106_completed = FALSE then send reminder with link to ITSE 106
+            # If topmed_user and dce101_completed = TRUE and itse106_completed = FALSE then send reminder with link to ITSE 106 (aka PEERRS_CUI_T100)
             # If topmed_user and dce101_completed = FALSE and itse106_completed = FALSE then send reminder with link to both
 
             if not topmed_user and not dce101_completed:
@@ -261,7 +261,7 @@ for username in report:
                 tpl = Template(lines)
 
                 emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'ITSE106 e-learning module completion reminder for ' + uniqname
+                emailsubj = 'PEERRS_CUI_T100 e-learning module completion reminder for ' + uniqname
 
             elif topmed_user and not dce101_completed and not itse106_completed:
                 with open(complete_both_tpl) as tp:
@@ -270,7 +270,7 @@ for username in report:
                 tpl = Template(lines)
 
                 emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'DCE 101 and ITSE106 e-learning modules completion reminder for ' + uniqname
+                emailsubj = 'DCE 101 and PEERRS_CUI_T100 e-learning modules completion reminder for ' + uniqname
 
             # Send the email reminder
             msg = MIMEMultipart('alternative')
