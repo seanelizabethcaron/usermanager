@@ -591,8 +591,8 @@ if result == None:
 else:
     dce101_completed = 1
 
-# Determine ITSE 106 completion status
-query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'ITS_ITSE106\') and d.Username in (\'' + uniqname + '\');'
+# Determine ITSE 106 completion status (note that this MAIS LINC course is now known as PEERRS_CUI_T100)
+query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_CUI_T100 \') and d.Username in (\'' + uniqname + '\');'
 
 mais_cursor.execute(query)
 result = mais_cursor.fetchone()
