@@ -1,13 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Requires packages: python-mssql, python3-mssql
-import csv, ldap, ConfigParser, pymssql, time, sys, os
+import csv, ldap, configparser, pymssql, time, sys, os
 
-dbhost = ''
-dbuser = ''
-passwd = ''
-dbport = ''
-db = ''
+dbhost = 'db-mylprdm.adsroot.itcs.umich.edu'
+dbuser = 'RMTSCHOFPH_MYLPRDM1'
+passwd = 'g4E2Vbxc!'
+dbport = '14330'
+db = 'MYLincPRD_UUD'
 
 # Connect to the database
 
@@ -29,15 +29,15 @@ curs = db.cursor()
 
 # ITS_ITSE106 or DCE101
 
-query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'ITS_ITSE106\') and d.Username in (\'scaron\');'
+query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_CUI_T100\') and d.Username in (\'aprnance\');'
 
 curs.execute(query)
 result = curs.fetchone()
 
 if result == None:
-    print "User has not completed DCE101"
+    print("User has not completed DCE101")
 else:
-    print "User has completed DCE101"
+    print("User has completed DCE101")
     print(result)
 
 #
