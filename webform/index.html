@@ -46,6 +46,7 @@
             <option value="kardiasmith_user">Kardia/Smith Lab user</option>
             <option value="mukherjee_user">Mukherjee Lab user</option>
             <option value="psoriasis_user">Psoriasis project user</option>
+            <option value="scott_user">Scott Lab user</option>
             <option value="willer_user">Willer Lab user</option>
             <option value="zhou_user">Zhou Lab user</option>
             <option value="zoellner_user">Zoellner Lab user</option>
@@ -167,6 +168,13 @@
                 if (!strGrp.includes("statgen-users")) {
                     event.preventDefault();
                     alert("Zoellner Lab users must at least be a member of group statgen-users!");
+                }
+            }
+
+            else if (strRole == "Scott Lab user") {
+                if (!strGrp.includes("statgen-users")) {
+                    event.preventDefault();
+                    alert("Scott Lab users must at least be a member of group statgen-users!");
                 }
             }
 
