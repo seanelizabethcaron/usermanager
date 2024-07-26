@@ -330,6 +330,15 @@ elif role == 'zoellner_user':
     elif c == 2:
         home_host = 'wonderland'
         homedir = '/net/wonderland/home/' + uniqname
+elif role == 'scott_user':
+    # Randomly assign the user a home directory on snowwhite or dumbo
+    c = random.randint(1, 2)
+    if c == 1:
+        home_host = 'dumbo'
+        homedir = '/net/dumbo/home/' + uniqname
+    elif c == 2:
+        home_host = 'snowwhite'
+        homedir = '/net/snowwhite/home/' + uniqname
 elif role == 'willer_user':
     home_host = 'hunt'
     homedir = '/net/hunt/home/' + uniqname
@@ -629,12 +638,12 @@ if create_samba:
     query = 'INSERT INTO samba (serialnum, host, uniqname, created, locked) VALUES (' + str(found_serialnum) + ',\'' + home_host + '\',\'' + uniqname + '\',0,0);'
     curs.execute(query)
     db.commit()
-    
+
     curs = db.cursor()
     query = 'INSERT INTO smbpasswd_workqueue (host, uniqname, action, ready) VALUES (\'' + home_host + '\',\'' + uniqname + '\',\'a\',0);'
     curs.execute(query)
     db.commit()
-    
+
 # Update the audit log
 if audit:
     audit_time = time.strftime("%A %b %d %H:%M:%S %Z", time.localtime())
@@ -717,5 +726,3 @@ s.quit()
 generate_html_header()
 account_request_successful(firstname.decode(), lastname.decode())
 generate_html_footer_noback()
-
-
