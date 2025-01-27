@@ -180,47 +180,66 @@ except KeyError:
 form = cgi.FieldStorage()
 
 uniqname = form.getvalue('uniqname')
+uniqname = uniqname.lower()
+
 if not uniqname:
     generate_html_header()
     no_uniqname_specified()
     generate_html_footer()
     sys.exit(0)
+
 title = form.getvalue('title')
+title = title.capitalize()
+
 if not title:
     generate_html_header()
     no_title_specified()
     generate_html_footer()
     sys.exit(0)
+
 email = form.getvalue('email')
+email = email.lower()
+
 if not email:
     generate_html_header()
     no_email_specified()
     generate_html_footer()
     sys.exit(0)
+
 reason = form.getvalue('reason')
+reason = reason.capitalize()
+
 if not reason:
     generate_html_header()
     no_reason_specified()
     generate_html_footer()
     sys.exit(0)
+
 role = form.getvalue('role')
 if not role:
     generate_html_header()
     no_role_specified()
     generate_html_footer()
     sys.exit(0)
+
 groups = form.getvalue('groups')
+
+# In case the groups were specified in caps or mixed case
+groups = groups.lower()
+
 if not groups:
     generate_html_header()
     no_groups_specified()
     generate_html_footer()
     sys.exit(0)
+
 startdate = form.getvalue('startdate')
 if not startdate:
     generate_html_header()
     no_startdate_specified()
     generate_html_footer()
     sys.exit(0)
+
 expirydate = form.getvalue('expirydate')
 if not expirydate:
     generate_html_header()
@@ -483,6 +502,9 @@ elif displayType == 'USE_GIVENNAME_SN':
 else:
     firstname = uniqname
     lastname = uniqname
+
+fistname = firstname.capitalize()
+lastname = lastname.capitalize()
 
 uid_number = results['uidNumber'][0]
 
