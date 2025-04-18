@@ -180,40 +180,40 @@ except KeyError:
 form = cgi.FieldStorage()
 
 uniqname = form.getvalue('uniqname')
-uniqname = uniqname.lower()
-
 if not uniqname:
     generate_html_header()
     no_uniqname_specified()
     generate_html_footer()
     sys.exit(0)
 
-title = form.getvalue('title')
-title = title.capitalize()
+uniqname = uniqname.lower()
 
+title = form.getvalue('title')
 if not title:
     generate_html_header()
     no_title_specified()
     generate_html_footer()
     sys.exit(0)
 
-email = form.getvalue('email')
-email = email.lower()
+title = title.capitalize()
 
+email = form.getvalue('email')
 if not email:
     generate_html_header()
     no_email_specified()
     generate_html_footer()
     sys.exit(0)
 
-reason = form.getvalue('reason')
-reason = reason.capitalize()
+email = email.lower()
 
+reason = form.getvalue('reason')
 if not reason:
     generate_html_header()
     no_reason_specified()
     generate_html_footer()
     sys.exit(0)
+
+reason = reason.capitalize()
 
 role = form.getvalue('role')
 if not role:
@@ -223,15 +223,14 @@ if not role:
     sys.exit(0)
 
 groups = form.getvalue('groups')
-
-# In case the groups were specified in caps or mixed case
-groups = groups.lower()
-
 if not groups:
     generate_html_header()
     no_groups_specified()
     generate_html_footer()
     sys.exit(0)
+
+# In case the groups were specified in caps or mixed case
+groups = groups.lower()
 
 startdate = form.getvalue('startdate')
 if not startdate:
