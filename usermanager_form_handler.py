@@ -432,7 +432,7 @@ if (result_set != []):
 #  that they need to request a uniqname first.
 
 #l = ldap.open("ldap.itd.umich.edu")
-l = ldap.initialize('ldap://' + campus_ldap_host + ':389')
+l = ldap.initialize('ldaps://' + campus_ldap_host + ':636')
 l.protocol_version = ldap.VERSION3
 baseDN = campus_ldap_basedn
 searchScope = ldap.SCOPE_SUBTREE
