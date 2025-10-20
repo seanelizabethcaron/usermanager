@@ -153,6 +153,8 @@ private_ldap_adminpass = cfg.get('privateldap', 'adminpass')
 
 campus_ldap_host = cfg.get('campusldap', 'host')
 campus_ldap_basedn = cfg.get('campusldap', 'basedn')
+campus_ldap_binduser = cfg.get('campusldap', 'binduser')
+campus_ldap_bindpass = cfg.get('campusldap', 'bindpass')
 
 pending_tpl = cfg.get('email', 'pending_tpl')
 confirm_tpl = cfg.get('email', 'confirm_tpl')
@@ -403,6 +405,7 @@ if debug:
 
 #l = ldap.open("csgadmin.csgstat.sph.umich.edu")
 l = ldap.initialize('ldap://' + private_ldap_host + ':389')
+l.simple_bind_s(campus_ldap_binduser, campus_ldap_bindpass)
 l.protocol_version = ldap.VERSION3
 baseDN = private_ldap_user_basedn
 searchScope = ldap.SCOPE_SUBTREE
