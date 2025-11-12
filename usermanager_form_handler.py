@@ -405,7 +405,6 @@ if debug:
 
 #l = ldap.open("csgadmin.csgstat.sph.umich.edu")
 l = ldap.initialize('ldap://' + private_ldap_host + ':389')
-l.simple_bind_s(campus_ldap_binduser, campus_ldap_bindpass)
 l.protocol_version = ldap.VERSION3
 baseDN = private_ldap_user_basedn
 searchScope = ldap.SCOPE_SUBTREE
@@ -436,6 +435,7 @@ if (result_set != []):
 
 #l = ldap.open("ldap.itd.umich.edu")
 l = ldap.initialize('ldaps://' + campus_ldap_host + ':636')
+l.simple_bind_s(campus_ldap_binduser, campus_ldap_bindpass)
 l.protocol_version = ldap.VERSION3
 baseDN = campus_ldap_basedn
 searchScope = ldap.SCOPE_SUBTREE
