@@ -625,7 +625,7 @@ else:
     dce101_completed = 1
 
 # Determine ITSE 106 completion status (note that this MAIS LINC course is now known as PEERRS_CUI_T100)
-query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_CUI_T100 \') and d.Username in (\'' + uniqname + '\');'
+query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_CUI_T100\') and d.Username in (\'' + uniqname + '\');'
 
 mais_cursor.execute(query)
 result = mais_cursor.fetchone()
@@ -635,12 +635,23 @@ if result == None:
 else:
     itse106_completed = 1
 
+# Determine PEERRS_DOJ_BulkData_T100 completion status
+query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_DOJ_BulkData_T100\') and d.Username in (\'' + uniqname + '\');'
+
+mais_cursor.execute(query)
+result = mais_cursor.fetchone()
+
+if result == None:
+    bulkdata_completed = 0
+else:
+    bulkdata_completed = 1
+    
 # If the required trainings have already been completed, be sure not to hold the account
-if dce101_completed and not topmed_user:
+if dce101_completed and bulkdata_completed and not topmed_user:
     held_since = '0000-00-00'
     held_pending = 0
     send_reminder = 0
-elif dce101_completed and itse106_completed and topmed_user:
+elif dce101_completed and bulkdata_completed and itse106_completed and topmed_user:
     held_since = '0000-00-00'
     held_pending = 0
     send_reminder = 0
@@ -652,7 +663,7 @@ else:
 
 # Update trainings table with gathered information
 curs = db.cursor()
-query = 'INSERT INTO trainings (serialnum, topmed_user, dce101_comp, itse106_comp, held_pending, held_since, send_reminder) VALUES (' + str(found_serialnum) + ', ' + str(topmed_user) + ', ' + str(dce101_completed) + ', ' + str(itse106_completed) + ', ' + str(held_pending) + ', \'' + held_since + '\', ' + str(send_reminder) + ');'
+query = 'INSERT INTO trainings (serialnum, topmed_user, dce101_comp, bulkdata_comp, itse106_comp, held_pending, held_since, send_reminder) VALUES (' + str(found_serialnum) + ', ' + str(topmed_user) + ', ' + str(dce101_completed) + ', ' + str(bulkdata_completed) + ', ' + str(itse106_completed) + ', ' + str(held_pending) + ', \'' + held_since + '\', ' + str(send_reminder) + ');'
 curs.execute(query)
 db.commit()
 
