@@ -63,7 +63,7 @@ print 'Creating trainings table ...\n'
 
 # Create trainings table
 curs = db.cursor()
-query = 'CREATE TABLE trainings (serialnum integer NOT NULL PRIMARY KEY, dce101_comp boolean, itse106_comp boolean, held_pending boolean, held_since varchar(16), send_reminder boolean);'
+query = 'CREATE TABLE trainings (serialnum integer NOT NULL PRIMARY KEY, dce101_comp boolean, bulkdata_comp boolean, itse106_comp boolean, held_pending boolean, held_since varchar(16), send_reminder boolean);'
 curs.execute(query)
 db.commit()
 
