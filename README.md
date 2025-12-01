@@ -104,6 +104,7 @@ CREATE TABLE trainings (
     serialnum integer NOT NULL PRIMARY KEY,
     topmed_user boolean,
     dce101_comp boolean,
+    bulkdata_comp boolean,
     itse106_comp boolean,
     held_pending boolean,
     held_since varchar(16),
