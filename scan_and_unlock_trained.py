@@ -98,6 +98,17 @@ for username in report:
     else:
         itse106_completed = 1
 
+    # Determine PEERRS_DOJ_BulkData_T100 completion status
+    query = 'SELECT a.PersonNumber, d.Username, b.Code, b.ActivityName, c.score, c.EndDt FROM Person a, TBL_TMX_Activity b, TBL_TMX_Attempt c, UserLogin d WHERE c.EmpFK = a.PersonPK AND c.ActivityFK = b.Activity_PK AND a.PersonPK= d.personfk AND b.Code in (\'PEERRS_DOJ_BulkData_T100\') and d.Username in (\'' + uniqname + '\');'
+
+    mais_cursor.execute(query)
+    result = mais_cursor.fetchone()
+
+    if result == None:
+        bulkdata_completed = 0
+    else:
+        bulkdata_completed = 1
+    
     # Update the local database record with current training completion status
     local_curs = local_db.cursor()
     query = 'UPDATE trainings SET dce101_comp = ' + str(dce101_completed) + ' WHERE serialnum = ' + str(serialnum) + ';'
@@ -107,14 +118,18 @@ for username in report:
     query = 'UPDATE trainings SET itse106_comp = ' + str(itse106_completed) + ' WHERE serialnum = ' + str(serialnum) + ';'
     local_curs.execute(query)
 
+    local_curs = local_db.cursor()
+    query = 'UPDATE trainings SET bulkdata_comp = ' + str(bulkdata_completed) + ' WHERE serialnum = ' + str(serialnum) + ';'
+    local_curs.execute(query)
+
     # At this point:
-    #  If dce_101 completed = TRUE and topmed_user = FALSE then unlock
-    #  If dce_101 completed = TRUE and itse106_completed = TRUE and topmed_user = TRUE then unlock
+    #  If dce_101 completed = TRUE and bulkdata_completed and topmed_user = FALSE then unlock
+    #  If dce_101 completed = TRUE and bulkdata_completed and itse106_completed = TRUE and topmed_user = TRUE then unlock
     #  Otherwise check to see if we need to send an email reminder about the training modules
 
-    if dce101_completed and not topmed_user:
+    if dce101_completed and bulkdata_completed and not topmed_user:
         unlock_account = 1
-    elif dce101_completed and itse106_completed and topmed_user:
+    elif dce101_completed and and bulkdata_completed and itse106_completed and topmed_user:
         unlock_account = 1
     else:
         unlock_account = 0
