@@ -34,8 +34,8 @@ debug = cfg.getboolean('logging', 'debug')
 audit_log_file = cfg.get('logging', 'auditlog')
 debug_log_file = cfg.get('logging', 'debuglog')
 
-complete_both_tpl = cfg.get('email', 'complete_both_tpl')
 complete_dce_tpl = cfg.get('email', 'complete_dce_tpl')
+complete_bulkdata_tpl = cfg.get('email', 'complete_bulkdata_tpl')
 complete_itse_tpl = cfg.get('email', 'complete_itse_tpl')
 
 # Set umask such that both root and www-data can write to logfiles
@@ -245,13 +245,8 @@ for username in report:
             firstname = result_set[0]
             email = result_set[1]
 
-            # So there are a bunch of cases to handle here:
-            # If not topmed_user and dce101_completed = FALSE then send reminder with link to DCE 101
-            # If topmed_user and dce101_completed = FALSE and itse106_completed = TRUE then send reminder with link to DCE 101
-            # If topmed_user and dce101_completed = TRUE and itse106_completed = FALSE then send reminder with link to ITSE 106 (aka PEERRS_CUI_T100)
-            # If topmed_user and dce101_completed = FALSE and itse106_completed = FALSE then send reminder with link to both
-
-            if not topmed_user and not dce101_completed:
+            # All users need to complete DCE 101
+            if not dce101_completed:
                 with open(complete_dce_tpl) as tp:
                     lines = tp.read()
 
@@ -260,16 +255,48 @@ for username in report:
                 emailtext = tpl.substitute(FIRSTNAME=firstname)
                 emailsubj = 'DCE 101 e-learning module completion reminder for ' + uniqname
 
-            elif topmed_user and not dce101_completed and itse106_completed:
-                with open(complete_dce_tpl) as tp:
+                # Send the email reminder
+                msg = MIMEMultipart('alternative')
+
+                msg['Subject'] = emailsubj
+                msg['From'] = 'do-not-reply@umich.edu'
+                msg['To'] = email
+
+                part1 = MIMEText(emailtext, 'html')
+
+                msg.attach(part1)
+
+                s = smtplib.SMTP('localhost')
+                s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
+                s.quit()
+
+             # All users need to complete PEERRS_DOJ_BulkData_T100
+             if not bulkdata_completed:
+                with open(complete_bulkdata_tpl) as tp:
                     lines = tp.read()
 
                 tpl = Template(lines)
 
                 emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'DCE 101 e-learning module completion reminder for ' + uniqname
+                emailsubj = 'PEERRS_DOJ_BulkData_T100 e-learning module completion reminder for ' + uniqname
 
-            elif topmed_user and dce101_completed and not itse106_completed:
+                # Send the email reminder
+                msg = MIMEMultipart('alternative')
+
+                msg['Subject'] = emailsubj
+                msg['From'] = 'do-not-reply@umich.edu'
+                msg['To'] = email
+
+                part1 = MIMEText(emailtext, 'html')
+
+                msg.attach(part1)
+
+                s = smtplib.SMTP('localhost')
+                s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
+                s.quit()
+
+              # Only FISMA and CUI enclave users need to complete PEERRS_CUI_T100
+              if topmed_user and  not itse106_completed:
                 with open(complete_itse_tpl) as tp:
                     lines = tp.read()
 
@@ -278,29 +305,19 @@ for username in report:
                 emailtext = tpl.substitute(FIRSTNAME=firstname)
                 emailsubj = 'PEERRS_CUI_T100 e-learning module completion reminder for ' + uniqname
 
-            elif topmed_user and not dce101_completed and not itse106_completed:
-                with open(complete_both_tpl) as tp:
-                    lines = tp.read()
+                # Send the email reminder
+                msg = MIMEMultipart('alternative')
 
-                tpl = Template(lines)
+                msg['Subject'] = emailsubj
+                msg['From'] = 'do-not-reply@umich.edu'
+                msg['To'] = email
 
-                emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'DCE 101 and PEERRS_CUI_T100 e-learning modules completion reminder for ' + uniqname
+                part1 = MIMEText(emailtext, 'html')
+                msg.attach(part1)
 
-            # Send the email reminder
-            msg = MIMEMultipart('alternative')
-
-            msg['Subject'] = emailsubj
-            msg['From'] = 'do-not-reply@umich.edu'
-            msg['To'] = email
-
-            part1 = MIMEText(emailtext, 'html')
-
-            msg.attach(part1)
-
-            s = smtplib.SMTP('localhost')
-            s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
-            s.quit()
+                s = smtplib.SMTP('localhost')
+                s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
+                s.quit()
 
             # Update the local database record so we only send one reminder at this time
             local_curs = local_db.cursor()
