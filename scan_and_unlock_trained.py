@@ -108,7 +108,7 @@ for username in report:
         bulkdata_completed = 0
     else:
         bulkdata_completed = 1
-    
+
     # Update the local database record with current training completion status
     local_curs = local_db.cursor()
     query = 'UPDATE trainings SET dce101_comp = ' + str(dce101_completed) + ' WHERE serialnum = ' + str(serialnum) + ';'
@@ -270,54 +270,54 @@ for username in report:
                 s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
                 s.quit()
 
-             # All users need to complete PEERRS_DOJ_BulkData_T100
-             if not bulkdata_completed:
-                with open(complete_bulkdata_tpl) as tp:
-                    lines = tp.read()
+            # All users need to complete PEERRS_DOJ_BulkData_T100
+            if not bulkdata_completed:
+               with open(complete_bulkdata_tpl) as tp:
+                   lines = tp.read()
 
-                tpl = Template(lines)
+               tpl = Template(lines)
 
-                emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'PEERRS_DOJ_BulkData_T100 e-learning module completion reminder for ' + uniqname
+               emailtext = tpl.substitute(FIRSTNAME=firstname)
+               emailsubj = 'PEERRS_DOJ_BulkData_T100 e-learning module completion reminder for ' + uniqname
 
-                # Send the email reminder
-                msg = MIMEMultipart('alternative')
+               # Send the email reminder
+               msg = MIMEMultipart('alternative')
 
-                msg['Subject'] = emailsubj
-                msg['From'] = 'do-not-reply@umich.edu'
-                msg['To'] = email
+               msg['Subject'] = emailsubj
+               msg['From'] = 'do-not-reply@umich.edu'
+               msg['To'] = email
 
-                part1 = MIMEText(emailtext, 'html')
+               part1 = MIMEText(emailtext, 'html')
 
-                msg.attach(part1)
+               msg.attach(part1)
 
-                s = smtplib.SMTP('localhost')
-                s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
-                s.quit()
+               s = smtplib.SMTP('localhost')
+               s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
+               s.quit()
 
-              # Only FISMA and CUI enclave users need to complete PEERRS_CUI_T100
-              if topmed_user and  not itse106_completed:
-                with open(complete_itse_tpl) as tp:
-                    lines = tp.read()
+            # Only FISMA and CUI enclave users need to complete PEERRS_CUI_T100
+            if topmed_user and  not itse106_completed:
+              with open(complete_itse_tpl) as tp:
+                  lines = tp.read()
 
-                tpl = Template(lines)
+              tpl = Template(lines)
 
-                emailtext = tpl.substitute(FIRSTNAME=firstname)
-                emailsubj = 'PEERRS_CUI_T100 e-learning module completion reminder for ' + uniqname
+              emailtext = tpl.substitute(FIRSTNAME=firstname)
+              emailsubj = 'PEERRS_CUI_T100 e-learning module completion reminder for ' + uniqname
 
-                # Send the email reminder
-                msg = MIMEMultipart('alternative')
+              # Send the email reminder
+              msg = MIMEMultipart('alternative')
 
-                msg['Subject'] = emailsubj
-                msg['From'] = 'do-not-reply@umich.edu'
-                msg['To'] = email
+              msg['Subject'] = emailsubj
+              msg['From'] = 'do-not-reply@umich.edu'
+              msg['To'] = email
 
-                part1 = MIMEText(emailtext, 'html')
-                msg.attach(part1)
+              part1 = MIMEText(emailtext, 'html')
+              msg.attach(part1)
 
-                s = smtplib.SMTP('localhost')
-                s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
-                s.quit()
+              s = smtplib.SMTP('localhost')
+              s.sendmail('do-not-reply@umich.edu', email, msg.as_string())
+              s.quit()
 
             # Update the local database record so we only send one reminder at this time
             local_curs = local_db.cursor()
