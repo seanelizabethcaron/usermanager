@@ -46,7 +46,7 @@ for username in report:
         bulkdata_completed = 1
 
     # Update the local database record
-    query = 'UPDATE trainings SET bulkdata_comp = ' + str(bulkdata_completed) + ' WHERE serialnum = \'' + str(username[0]) + '\';'
+    query = 'UPDATE trainings SET bulkdata_comp = ' + str(bulkdata_completed) + ' WHERE serialnum = ' + str(username[0]) + ';'
     local_curs.execute(query)
 
 local_db.commit()
