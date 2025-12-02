@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-import csv, ldap, ConfigParser, MySQLdb, time, sys, os, pymssql, datetime
+import csv, ldap, configparser, MySQLdb, time, sys, os, pymssql, datetime
 
-cfg = ConfigParser.ConfigParser()
+cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
 
 dbuser = cfg.get('database', 'user')
