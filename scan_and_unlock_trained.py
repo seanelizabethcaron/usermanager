@@ -129,7 +129,7 @@ for username in report:
 
     if dce101_completed and bulkdata_completed and not topmed_user:
         unlock_account = 1
-    elif dce101_completed and and bulkdata_completed and itse106_completed and topmed_user:
+    elif dce101_completed and bulkdata_completed and itse106_completed and topmed_user:
         unlock_account = 1
     else:
         unlock_account = 0
