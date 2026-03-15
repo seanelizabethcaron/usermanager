@@ -4,6 +4,9 @@
 # Requires packages: python3-mysqldb python3-ldap
 #
 
+import warnings
+warnings.filterwarnings("ignore", "'cgi' is deprecated", DeprecationWarning)
+
 import os, cgi, time, sys, MySQLdb, configparser, smtplib, json, requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
