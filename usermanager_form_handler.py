@@ -122,6 +122,9 @@ def err_invalid_chars():
     print('Field contains invalid characters. Please go back and check fields for invalid characters.')
 
 # Requires packages: python-ldap, python-mysqldb
+import warnings
+warnings.filterwarnings("ignore", "'cgi' is deprecated", DeprecationWarning)
+
 import sys,os,cgi,time,ldap,MySQLdb,configparser,smtplib,random,pymssql,datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
