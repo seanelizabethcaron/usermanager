@@ -34,7 +34,10 @@ def generate_html_footer():
 
 def cosign_failure():
     print('Cosign appears to be broken. Please contact a systems administrator.')
-    
+
+import warnings
+warnings.filterwarnings("ignore", "'cgi' is deprecated", DeprecationWarning)
+
 import os, cgi, time, datetime, sys, MySQLdb, configparser, ldap
 import ldap.modlist as modlist
 
