@@ -4,6 +4,9 @@
 # Requires packages: python3-ldap, python3-mysqldb
 #
 
+import warnings
+warnings.filterwarnings("ignore", "'cgi' is deprecated", DeprecationWarning)
+
 import sys,os,subprocess,cgi,time,MySQLdb,configparser,smtplib,string,random,platform,os,shutil,stat,pwd,grp
 
 cfg = configparser.ConfigParser()
