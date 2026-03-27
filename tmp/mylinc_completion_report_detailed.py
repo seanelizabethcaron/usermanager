@@ -63,6 +63,7 @@ for username in report:
         dce101_completed = 1
         if type(result[5]) is not type(None):
             dce_cdate = str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+        # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
             dce101_completed = 0
             dce_cdate = '-'
@@ -80,6 +81,7 @@ for username in report:
         itse106_completed = 1
         if type(result[5]) is not type(None):
             itse_cdate =  str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+        # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
             itse106_completed = 0
             dce_cdate = '-'
@@ -97,6 +99,7 @@ for username in report:
         bulkdata_completed = 1
         if type(result[5]) is not type(None):
             bulkdata_cdate = str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+        # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
             bulkdata_completed = 0
             bulkdata_cdate = '-'
