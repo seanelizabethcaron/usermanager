@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-import csv, ldap, configparser, MySQLdb, time, sys, os, pymssql, datetime
+import csv, configparser, MySQLdb, time, sys, os, io, pymssql, datetime
+from io import StringIO
 
 cfg = configparser.ConfigParser()
 cfg.read('/opt/usermanager/etc/usermanager.ini')
@@ -23,14 +24,14 @@ width_uniqname = 16
 width_dce101 = 5
 width_bulkdata = 5
 width_itse106 = 5
-width_dcedate = 30
-width_itsedate = 30
-width_bulkdate = 30
+width_dcedate = 23
+width_itsedate = 23
+width_bulkdate = 23
 
 # Print header
 print(f"{'Lastname':<{width_lastname}} {'Firstname':<{width_firstname}} {'Uniqname':<{width_uniqname}} {'DCE':<{width_dce101}} {'DCE_DATE':<{width_dcedate}} {'BULK':<{width_bulkdata}} {'BULK_DATE':<{width_bulkdate}} {'ITSE':<{width_itse106}} {'ITSE_DATE':<{width_itsedate}}")
 
-print("-" * (width_lastname + width_firstname + width_uniqname + width_dce101 + width_dcedate + width_bulkdata + width_bulkdate + width_itsedate + 4))
+print("-" * (width_lastname + width_firstname + width_uniqname + width_dce101 + width_dcedate + width_bulkdata + width_bulkdate + width_itsedate + 9))
 
 # Get list of users to check from our local DB
 
@@ -57,15 +58,17 @@ for username in report:
     result = mais_cursor.fetchone()
 
     if result == None:
-        dce101_completed = 0
+        dce101_completed = 'N'
         dce_cdate = '-'
     else:
-        dce101_completed = 1
+        dce101_completed = 'Y'
         if type(result[5]) is not type(None):
-            dce_cdate = str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+            dce_cdate_o = StringIO()
+            print("%02d/%02d/%04d %02d:%02d:%02d" % (result[5].month, result[5].day, result[5].year, result[5].hour, result[5].minute, result[5].second), end="", file=dce_cdate_o)
+            dce_cdate = dce_cdate_o.getvalue()
         # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
-            dce101_completed = 0
+            dce101_completed = 'N'
             dce_cdate = '-'
 
     # Determine ITSE 106 completion status (note that this MAIS LINC course is now known as PEERRS_CUI_T100)
@@ -75,15 +78,17 @@ for username in report:
     result = mais_cursor.fetchone()
 
     if result == None:
-        itse106_completed = 0
+        itse106_completed = 'N'
         itse_cdate = '-'
     else:
-        itse106_completed = 1
+        itse106_completed = 'Y'
         if type(result[5]) is not type(None):
-            itse_cdate =  str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+            itse_cdate_o = StringIO()
+            print("%02d/%02d/%04d %02d:%02d:%02d" % (result[5].month, result[5].day, result[5].year, result[5].hour, result[5].minute, result[5].second), end="", file=itse_cdate_o)
+            itse_cdate = itse_cdate_o.getvalue()
         # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
-            itse106_completed = 0
+            itse106_completed = 'N'
             dce_cdate = '-'
 
     # Determine PEERRS_DOJ_BulkData_T100 completion status
@@ -93,19 +98,21 @@ for username in report:
     result = mais_cursor.fetchone()
 
     if result == None:
-        bulkdata_completed = 0
+        bulkdata_completed = 'N'
         bulkdata_cdate = '-'
     else:
-        bulkdata_completed = 1
+        bulkdata_completed = 'Y'
         if type(result[5]) is not type(None):
-            bulkdata_cdate = str(result[5].day) + '/' + str(result[5].month) + '/' + str(result[5].year) + ' ' + str(result[5].hour) + ':' + str(result[5].minute) + ':' + str(result[5].second)
+            bulkdata_cdate_o = StringIO()
+            print("%02d/%02d/%04d %02d:%02d:%02d" % (result[5].month, result[5].day, result[5].year, result[5].hour, result[5].minute, result[5].second), end="", file=bulkdata_cdate_o)
+            bulkdata_cdate = bulkdata_cdate_o.getvalue()
         # A row with a Null completion date. Does this mean a recurring course completed at least once but expired for this year? Mark it as not completed in this case
         else:
-            bulkdata_completed = 0
+            bulkdata_completed = 'N'
             bulkdata_cdate = '-'
 
     # Print data
-    print(f"{username[3]:<{width_lastname}} {username[2]:<{width_firstname}} {username[1]:<{width_uniqname}} {dce101_completed:<{width_dce101}d} {dce_cdate:<{width_dcedate}} {bulkdata_completed:<{width_bulkdata}d} {bulkdata_cdate:<{width_bulkdate}} {itse106_completed:<{width_itse106}d} {itse_cdate:<{width_itsedate}}")
+    print(f"{username[3]:<{width_lastname}} {username[2]:<{width_firstname}} {username[1]:<{width_uniqname}} {dce101_completed:<{width_dce101}} {dce_cdate:<{width_dcedate}} {bulkdata_completed:<{width_bulkdata}} {bulkdata_cdate:<{width_bulkdate}} {itse106_completed:<{width_itse106}} {itse_cdate:<{width_itsedate}}")
 
 local_db.commit()
 
